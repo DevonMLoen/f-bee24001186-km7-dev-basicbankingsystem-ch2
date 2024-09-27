@@ -57,3 +57,98 @@ function login() {
     });
 }
 
+function mainMenu() {
+    console.log("=== Main Menu ===");
+    console.log("1. Login");
+    console.log("2. Create Account");
+    console.log("0. Log Out");
+    rl.question("Choose Option: ", (answer) => {
+        if (answer === "1") {
+            login();
+        } else if (answer === "2") {
+            createAccount();     
+        } else if (answer === "0") {
+            rl.close();
+        } else {
+            console.log("Your Option is invalid.");
+            mainMenu();
+        }
+    });
+}
+
+function setTimeoutPromise(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function userMenu(user) {
+    console.log("\n=== User Menu ===");
+    console.log("1. Deposit");
+    console.log("2. Withdraw");
+    console.log("3. Check Balance");
+    console.log("4. Investment");
+    if (user instanceof PriorityCustomer) {
+        console.log("5. Deposit an Item to Safe Deposit Box");
+        console.log("6. Display Item in Safe Deposit Box");
+        console.log("7. Retrieve an Item from Safe Deposit Box");
+    }
+    console.log("0. Logout");
+
+    rl.question("Choose Option: ", async (answer) => {
+        if (answer === "1") {
+            rl.question("Deposit amount: ", async (amount) => {
+                console.log("Processing Deposit...");
+                await setTimeoutPromise(1000); // Simulasi delay 1 detik
+                try {
+                    user.deposit(parseInt(amount));
+                    console.log(`Deposit Successful! Your Balance: ${user.userBalance}\n`);
+                } catch (error) {   
+                    console.log(`Error : ${error.message}`);
+                }
+                userMenu(user);
+            });
+        } else if (answer === "2") {
+            rl.question("Withdraw amount: ", async (amount) => {
+                console.log("Processing withdraw...");
+                await setTimeoutPromise(1000); 
+                try {
+                    user.withdraw(parseInt(amount));
+                    console.log(`Withdraw Successful! Your Balance: ${user.userBalance}\n`);
+                } catch (error) {
+                    console.log(`Error : ${error.message}`);
+                }
+                userMenu(user);
+            });
+        } else if (answer === "3") {
+            console.log(user.balance);
+            userMenu(user);
+        } else if (answer === "4") {
+            rl.question("Investment Amount: ", (amount) => {
+                try {
+                    user.investment(parseInt(amount));
+                } catch (error) {
+                    console.log(`Error : ${error.message}`);
+                }
+                userMenu(user);
+            });
+        } else if (answer === "5" && user instanceof PriorityCustomer) {
+            rl.question("Enter the name of the item to deposit: ", (item) => {
+                user.storeItem(item);
+                userMenu(user);
+            });
+        } else if (answer === "6" && user instanceof PriorityCustomer) {
+            user.displaySafeDepositBox(); 
+            userMenu(user);
+        } else if (answer === "7" && user instanceof PriorityCustomer) {
+            rl.question("Enter the name of the item to retrieve: ", (item) => {
+                user.retrieveItem(item);
+                userMenu(user);
+            });
+        } else if (answer === "0") {
+            mainMenu();
+        } else {
+            userMenu();
+        }
+    });
+}
+
+mainMenu();
