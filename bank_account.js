@@ -146,3 +146,9 @@ class StandardCustomer extends Public(Account) {
         super(userBalance, userName, password);
     }
 }
+
+module.exports = {
+    StandardCustomer,
+    PriorityCustomer,
+    
+  };
