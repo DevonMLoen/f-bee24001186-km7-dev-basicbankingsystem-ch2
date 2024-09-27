@@ -4,6 +4,7 @@
   "description": "OOP",
   "main": "bank_account.js",
   "scripts": {
+    "start": "node banking_system.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Devon",
