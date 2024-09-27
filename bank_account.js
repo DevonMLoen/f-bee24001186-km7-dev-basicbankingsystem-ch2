@@ -132,3 +132,17 @@ const Public = Base => class extends Base {
         console.log(`Investment earned: ${investment.toFixed(2)}, New Balance: ${this.userBalance.toFixed(2)}`);
     }
 };
+
+//Polymorphism
+class PriorityCustomer extends Vip(Public(Account)) {
+    constructor(userBalance, userName, password) {
+        super(userBalance, userName, password);
+        this.safeDepositBox = [];
+    }
+}
+
+class StandardCustomer extends Public(Account) {
+    constructor(userBalance, userName, password) {
+        super(userBalance, userName, password);
+    }
+}
