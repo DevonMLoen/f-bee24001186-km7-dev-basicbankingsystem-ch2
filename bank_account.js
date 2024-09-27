@@ -45,3 +45,38 @@ class Bank {
         this.userBalance -= parseInt(value);
     }
 }
+
+//Error Class
+class ValidationError extends Error {
+    constructor(message, field) {
+        super(message);
+        this.field = field;
+    }
+}
+
+//Inheritance
+class Account extends Bank {
+    #encryptedPassword;
+    constructor(userBalance = 0, userName = "Anonymous", password = "defaultPassword") {
+        super(userBalance, userName);
+        this.#encryptedPassword = this.#encrypt(password);
+    }
+    //ENCAPSULATION
+    #encrypt(password) {
+        return `encrypted-version-of-${password}`;
+    }
+
+    #decrypt() {
+        return this.#encryptedPassword.split("encrypted-version-of-")[1];
+    }
+
+    authenticate(password) {
+        return this.#decrypt() === password;
+    }
+
+    updatePassword(oldPass, newPass) {
+        if (this.authenticate(oldPass)) {
+            this.#encryptedPassword = this.#encrypt(newPass);
+        }
+    }
+}
