@@ -1,8 +1,3 @@
-Here’s a README document that explains the functionality and usage of the provided banking application code:
-
----
-
-
 # Banking Application
 
 This is a simple console-based banking application built using JavaScript and Node.js. The application allows users to create accounts, deposit and withdraw money, invest, and manage a safe deposit box (available for priority customers).
@@ -28,19 +23,13 @@ This is a simple console-based banking application built using JavaScript and No
     - Retrieve Items
     - Display Stored Items
 
-## Installation
+## Running the Program
 
-1. Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
-2. Clone this repository or download the code files to your local machine.
-3. Navigate to the project directory in your terminal.
-4. Run the following command to install any dependencies (if applicable):
-   ```bash
-   npm install
-   ```
-5. Start the application with:
-   ```bash
-   node app.js
-   ```
+To run the application, use the following command:
+
+```bash
+npm run start
+```
 
 ## Usage
 
@@ -120,10 +109,6 @@ Deposit Successful! Your Balance: 1500
 - The application uses JavaScript's asynchronous features to simulate transaction processing delays.
 - The user interface is command-line based and requires input through the terminal.
 - The code follows Object-Oriented Programming principles with classes for account management, encapsulation for password handling, and inheritance for account types.
-
-## License
-
-This project is licensed under the MIT License.
 
 ---
 
