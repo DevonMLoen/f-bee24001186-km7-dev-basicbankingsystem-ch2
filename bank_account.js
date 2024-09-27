@@ -80,3 +80,55 @@ class Account extends Bank {
         }
     }
 }
+
+// Helper/Module
+const Vip = Base => class extends Base {
+    investment(amount) {
+        if (isNaN(amount)) {
+            throw new ValidationError("Please provide a Value in the form of a Number", "InvestmentError");
+        }
+
+        if (this.userBalance < amount) {
+            throw new ValidationError("Investment amount exceeds available balance", "InvestmentError");
+        }
+        const investmentRate = 0.10;
+        const investment = amount * investmentRate;
+        this.userBalance += investment;
+        console.log(`Investment earned: ${investment.toFixed(2)}, New Balance: ${this.userBalance.toFixed(2)}`);
+    }
+
+    storeItem(item) {
+        this.safeDepositBox.push(item);
+        console.log(`Item "${item}" has been stored in the Safe Deposit Box.`);
+    }
+
+    retrieveItem(item) {
+        const index = this.safeDepositBox.indexOf(item);
+        if (index > -1) {
+            this.safeDepositBox.splice(index, 1);
+            console.log(`Item "${item}" has been retrieved from the Safe Deposit Box.`);
+        } else {
+            console.log(`Item "${item}" not found in the Safe Deposit Box.`);
+        }
+    }
+
+    displaySafeDepositBox() {
+        console.log("Items in Safe Deposit Box:", this.safeDepositBox.length > 0 ? this.safeDepositBox : "Empty");
+    }
+};
+
+const Public = Base => class extends Base {
+    investment(amount) {
+        if (isNaN(amount)) {
+            throw new ValidationError("Please provide a Value in the form of a Number", "InvestmentError");
+        }
+
+        if (this.userBalance < amount) {
+            throw new ValidationError("Investment amount exceeds available balance", "InvestmentError");
+        }
+        const investmentRate = 0.03;
+        const investment = amount * investmentRate;
+        this.userBalance += investment;
+        console.log(`Investment earned: ${investment.toFixed(2)}, New Balance: ${this.userBalance.toFixed(2)}`);
+    }
+};
