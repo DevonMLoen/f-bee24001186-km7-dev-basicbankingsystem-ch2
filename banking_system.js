@@ -42,3 +42,18 @@ function createAccount() {
     });
 }
 
+function login() {
+    rl.question("Enter UserName: ", (name) => {
+        rl.question("Enter Password: ", (password) => {
+            const user = accounts[name];
+            if (user && user.authenticate(password)) {
+                console.log(`Successfully logged in as ${name}\n`);
+                userMenu(user);
+            } else {
+                console.log("Login failed. Try again.\n");
+                mainMenu();
+            }
+        });
+    });
+}
+
