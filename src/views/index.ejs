@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - My Banking App</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Binar Banking App</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Available Users</h2>
+            <ul>
+                <% users.forEach(user => { %>
+                    <li><a href="/api/v1/users/<%= user.userId %>/views">View <%= user.userName %></a></li>
+                <% }) %>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Binar Banking App</p>
+    </footer>
+</body>
+</html>
