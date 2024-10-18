@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details - <%= user.userName %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>User Details</h1>
+    </header>
+    <main>
+        <section class="user-details">
+            <h2><%= user.userName %></h2>
+            <p>Email: <%= user.userEmail %></p>
+            <h3>Profile Information</h3>
+            <p>Type: <%= user.profile[0]?.profileType %></p>
+            <p>Profile Number: <%= user.profile[0]?.profileNumber %></p>
+            <p>Address: <%= user.profile[0]?.address %></p>
+
+            <h3>Bank Account Information</h3>
+            <ul>
+                <% user.bankAccount.forEach((account, index) => { %>
+                    <li class="account-entry">
+                        <p><strong>Bank Name:</strong> <%= account.bankName %></p>
+                        <p><strong>Account Number:</strong> <%= account.bankAccountNumber %></p>
+                        <p><strong>Balance:</strong> $<%= account.balance.toFixed(2) %></p>
+                        <% if (index < user.bankAccount.length - 1) { %>
+                            <hr class="account-divider">
+                        <% } %>
+                    </li>
+                <% }); %>
+            </ul>
+
+            <a href="/">Back to Home</a>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Binar Banking App</p>
+    </footer>
+</body>
+</html>
