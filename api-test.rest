@@ -1,0 +1,85 @@
+### Create User
+POST http://localhost:2000/api/v1/users
+Content-Type: application/json
+
+{
+    "userName": "Jane Doe",
+    "userEmail": "john.doe@example.com",
+    "userPassword": "supersecurepassword",
+    "profileType": "Personal",
+    "profileNumber": "12345",
+    "address": "123 Main St"
+}
+
+### Get Users
+GET http://localhost:2000/api/v1/users
+
+### Get User By ID
+GET http://localhost:2000/api/v1/users/1
+
+### Create Bank Account 
+POST http://localhost:2000/api/v1/accounts
+Content-Type: application/json
+
+{
+  "userId": 2,
+  "bankName": "Bank ABC",
+  "bankAccountNumber": "1234567890",
+  "balance": 1000.00
+}
+
+### Get All Bank Accounts
+GET  http://localhost:2000/api/v1/accounts
+
+### Mengambil akun bank berdasarkan ID
+GET http://localhost:2000/api/v1/accounts/1
+
+### Mengupdate akun bank
+PATCH http://localhost:2000/api/v1/accounts/1
+Content-Type: application/json
+
+{
+    "bankName": "Bank XYZ",
+    "bankAccountNumber": "987654321",
+    "balance": 1500.00
+}
+
+### Menarik saldo dari akun bank
+PATCH http://localhost:2000/api/v1/accounts/1/withdraw
+Content-Type: application/json
+
+{
+    "amount": 200.00
+}
+
+### Menyetor saldo ke akun bank
+PATCH http://localhost:2000/api/v1/accounts/1/deposit
+Content-Type: application/json
+
+{
+    "amount": 500.00
+}
+
+### Menghapus akun bank berdasarkan ID
+DELETE http://localhost:2000/api/v1/accounts/1
+
+
+### Mengambil semua transaksi
+GET http://localhost:2000/api/v1/transactions
+
+
+
+### Membuat transaksi baru
+POST http://localhost:2000/api/v1/transactions
+Content-Type: application/json
+
+{
+    "sourceAccountId": 3,
+    "destinationAccountId": 4,
+    "amount": 500.00
+}
+
+
+### Mengambil transaksi berdasarkan ID
+GET http://localhost:2000/api/v1/transactions/1
+
