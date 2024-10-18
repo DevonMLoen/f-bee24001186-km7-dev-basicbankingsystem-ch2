@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  @@map("users")
+  userId       Int       @id @default(autoincrement()) @map("user_id")
+  userName     String   @map("user_name")
+  userEmail    String   @map("user_email")
+  userPassword String   @map("user_password")
+  profile       Profile[]
+  bankAccount   BankAccount[] 
+}
+
+model Profile {
+  @@map("profiles")
+  profileId    Int    @id @default(autoincrement()) @map("profile_id")
+  userId       Int      @map("user_id")
+  profileType  String   @map("profile_type")
+  profileNumber String  @map("profile_number")
+  address       String
+  user          User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
+}
+
+model BankAccount {
+  @@map("bank_accounts")
+  bankAccountId      Int      @id @default(autoincrement()) @map("bank_account_id")
+  userId              Int     @map("user_id")
+  bankName            String  @map("bank_name")
+  bankAccountNumber  String   @map("bank_account_number")
+  balance              Float
+
+  user                 User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  transactionSource    Transaction[] @relation("source")
+  transactionDestination Transaction[] @relation("destination")
+}
+
+model Transaction {
+  @@map("transactions")
+  transactionId        Int    @id @default(autoincrement()) @map("transaction_id")
+  sourceAccountId     Int   @map("source_account_id")
+  destinationAccountId Int   @map("destination_account_id")
+  amount                Float
+
+  bankAccountSource     BankAccount @relation("source", fields: [sourceAccountId], references: [bankAccountId], onDelete: Cascade)
+  bankAccountDestination BankAccount @relation("destination", fields: [destinationAccountId], references: [bankAccountId], onDelete: Cascade)
+}
