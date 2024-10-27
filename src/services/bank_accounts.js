@@ -34,7 +34,7 @@ class BankAccount {
             return newAccount;
         } catch (error) {
             console.error(error);
-            throw new Error('Failed to create bank account');
+            throw new Error('Failed to create bank account : ' + error.message);
         }
     }
 
@@ -48,8 +48,7 @@ class BankAccount {
 
             return bankAccounts;
         } catch (error) {
-            console.error(error);
-            throw new Error('Failed to get all bank accounts');
+            throw new Error('Failed to get all bank accounts : ' + error.message);
         }
     }
 
@@ -62,8 +61,7 @@ class BankAccount {
             });
             return accounts;
         } catch (error) {
-            console.error(error);
-            throw new Error('Failed to get bank accounts');
+            throw new Error('Failed to get bank accounts : ' + error.message);
         }
     }
 
@@ -80,8 +78,7 @@ class BankAccount {
 
             return bankAccount;
         } catch (error) {
-            console.error(error);
-            throw new Error('Failed to get Bank Account');
+            throw new Error('Failed to get Bank Account : ' + error.message);
         }
     }
 
@@ -105,8 +102,7 @@ class BankAccount {
 
             return { message: 'Bank account successfully deleted' };
         } catch (error) {
-            console.error(error);
-            throw new Error('Failed to delete bank account');
+            throw new Error('Failed to delete bank account : ' + error.message);
         }
     }
 
@@ -135,8 +131,7 @@ class BankAccount {
 
             return updatedAccount;
         } catch (error) {
-            console.error(error);
-            throw new Error('Failed to update bank account');
+            throw new Error('Failed to update bank account : ' + error.message);
         }
     }
 
@@ -172,7 +167,7 @@ class BankAccount {
             return updatedAccount; 
         } catch (error) {
             console.error(error);
-            throw new Error('Failed to withdraw from bank account');
+            throw new Error('Failed to withdraw from bank account : ' + error.message);
         }
     }
 
@@ -208,7 +203,7 @@ class BankAccount {
             return updatedAccount; 
         } catch (error) {
             console.error(error);
-            throw new Error('Failed to deposit from bank account');
+            throw new Error('Failed to deposit from bank account : ' + error.message);
         }
     }
 }

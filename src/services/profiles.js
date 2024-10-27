@@ -20,8 +20,7 @@ class Profile {
       });
       return newProfile;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create profile');
+      throw new Error('Failed to create profile : ' + error.message);
     }
   }
 
@@ -34,8 +33,7 @@ class Profile {
       });
       return profile;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to get profile');
+      throw new Error('Failed to get profile : ' + error.message);
     }
   }
 }

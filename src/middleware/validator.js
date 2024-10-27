@@ -170,6 +170,37 @@ const transactionSchema = joi.object({
     }),
 });
 
+const resetPasswordSchema = joi.object({
+  newPassword: joi.string()
+    .min(10)
+    .required()
+    .messages({
+      'string.base': 'New password must be a string.',
+      'string.min': 'New password must have at least 10 characters.',
+      'any.required': 'New password is required.'
+    }),
+});
+
+const loginSchema = joi.object({
+  email: joi.string()
+    .email()
+    .required()
+    .messages({
+      'string.base': 'Email must be a string.',
+      'string.email': 'Email must be a valid email address.',
+      'any.required': 'Email is required.'
+    }),
+
+  password: joi.string()
+    .required()
+    .messages({
+      'string.base': 'Password must be a string.',
+      'any.required': 'Password is required.'
+    }),
+});
+
+
+
 const validateBankAccount = (req, res, next) => {
   const { error } = bankAccountSchema.validate(req.body);
   if (error) {
@@ -196,4 +227,21 @@ const validateTransaction = (req, res, next) => {
   next();
 };
 
-module.exports = { validateUser, validateBankAccount, validateTransaction, validateBankPatchAccount };
+const validateResetPassword = (req, res, next) => {
+  const { error } = resetPasswordSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  next();
+};
+
+const validateLogin = (req, res, next) => {
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  next();
+};
+
+
+module.exports = { validateUser, validateBankAccount, validateTransaction, validateBankPatchAccount , validateLogin , validateResetPassword };
