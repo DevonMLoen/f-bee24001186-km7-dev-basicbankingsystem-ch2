@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { validateTransaction } = require('../middleware/validator.js');
 const Transaction = require('../services/transactions.js');
+const restrict = require('../middleware/restrict');
+
+router.use(restrict); // add jwt authenticate
 
 router.get("/", async (req, res) => {
   try {

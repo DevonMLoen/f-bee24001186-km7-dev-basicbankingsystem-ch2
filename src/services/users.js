@@ -1,5 +1,6 @@
 const prisma = require("../db");
-const Profile = require("./profiles")
+const Profile = require("./profiles");
+const bcrypt = require('bcrypt');
 
 class User {
   static prisma = prisma;
@@ -21,19 +22,27 @@ class User {
       });
       return newUser;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create user');
+      throw new Error('Failed to create user : ' + error.message);
     }
   }
 
   async createUserWithProfile(profileData) {
     try {
+    const existingEmail = await User.prisma.user.findUnique({
+      where: { userEmail: this.email },
+    });
+
+    if (existingEmail) {
+      throw new Error('Email has already been used');
+    }
+
+      const hashedPassword = await bcrypt.hash(this.password, 10);
       const result = await User.prisma.$transaction(async (tx) => {
         const newUser = await tx.user.create({
           data: {
             userName: this.name,
             userEmail: this.email,
-            userPassword: this.password,
+            userPassword: hashedPassword,
           },
         });
         const profile = new Profile(profileData);
@@ -45,8 +54,7 @@ class User {
 
       return result;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to create user with profile');
+      throw new Error('Failed to create user with profile : ' + error.message);
     }
   }
 
@@ -69,8 +77,7 @@ class User {
 
       return user;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to get user');
+      throw new Error('Failed to get user : ' + error.message);
     }
   }
 
@@ -84,8 +91,7 @@ class User {
 
       return users;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to get all users');
+      throw new Error('Failed to get all users : ' + error.message);
     }
   }
 

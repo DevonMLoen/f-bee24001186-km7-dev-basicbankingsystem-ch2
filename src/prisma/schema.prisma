@@ -17,7 +17,7 @@ model User {
   @@map("users")
   userId       Int       @id @default(autoincrement()) @map("user_id")
   userName     String   @map("user_name")
-  userEmail    String   @map("user_email")
+  userEmail    String   @map("user_email") @unique
   userPassword String   @map("user_password")
   profile       Profile[]
   bankAccount   BankAccount[] 

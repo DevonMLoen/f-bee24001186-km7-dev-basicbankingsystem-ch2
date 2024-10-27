@@ -3,6 +3,9 @@ const User = require('../services/users');
 const { validateUser } = require("../middleware/validator");
 
 const router = express.Router();
+const restrict = require('../middleware/restrict');
+
+router.use(restrict); // add jwt authenticate
 
 router.get("/", async (req, res) => {
     try {
@@ -20,7 +23,6 @@ router.get("/", async (req, res) => {
 router.post("/", validateUser, async (req, res, next) => {
     try {
         const value = { ...req.body };
-        // console.log(value)
 
         const userData = {
             name: value.userName,

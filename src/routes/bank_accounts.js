@@ -3,6 +3,10 @@ const { validateBankAccount, validateBankPatchAccount } = require('../middleware
 const BankAccount = require('../services/bank_accounts');
 const router = express.Router();
 
+const restrict = require('../middleware/restrict');
+
+router.use(restrict); // add jwt authenticate
+
 router.get("/", async (req, res) => {
     try {
         const bankaccounts = await BankAccount.getAllBankAccounts();

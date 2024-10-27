@@ -36,8 +36,7 @@ class Transaction {
       return transactionResult;
 
     } catch (error) {
-      console.error(error);
-      throw new Error(error.message);
+      throw new Error('Failed to Create transactions : ' + error.message);
     }
   }
 
@@ -76,8 +75,7 @@ class Transaction {
       });
       return transactions;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to retrieve transactions');
+      throw new Error('Failed to retrieve transactions : ' + error.message);
     }
   }
 
@@ -95,8 +93,7 @@ class Transaction {
 
       return transaction;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to get Transaction');
+      throw new Error('Failed to get Transaction : ' + error.message);
     }
   }
 }
