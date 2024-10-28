@@ -33,7 +33,6 @@ class BankAccount {
             });
             return newAccount;
         } catch (error) {
-            console.error(error);
             throw new Error('Failed to create bank account : ' + error.message);
         }
     }
@@ -52,19 +51,6 @@ class BankAccount {
         }
     }
 
-    static async getAllAccountsByUserId(userId) {
-        try {
-            const accounts = await BankAccount.prisma.bankAccount.findMany({
-                where: {
-                    userId: userId,
-                },
-            });
-            return accounts;
-        } catch (error) {
-            throw new Error('Failed to get bank accounts : ' + error.message);
-        }
-    }
-
     static async getBankAccountById(bankAccountId) {
         try {
             const bankAccount = await BankAccount.prisma.bankAccount.findUnique({
@@ -75,6 +61,10 @@ class BankAccount {
                     user: true,
                 },
             });
+
+            if (!bankAccount) {
+                throw new Error('Bank account not found');
+            }
 
             return bankAccount;
         } catch (error) {
@@ -166,7 +156,6 @@ class BankAccount {
 
             return updatedAccount; 
         } catch (error) {
-            console.error(error);
             throw new Error('Failed to withdraw from bank account : ' + error.message);
         }
     }
@@ -202,7 +191,6 @@ class BankAccount {
 
             return updatedAccount; 
         } catch (error) {
-            console.error(error);
             throw new Error('Failed to deposit from bank account : ' + error.message);
         }
     }
