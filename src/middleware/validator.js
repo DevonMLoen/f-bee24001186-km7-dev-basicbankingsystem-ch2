@@ -126,7 +126,7 @@ const bankAccountPatchSchema = joi.object({
     }),
 
   balance: joi.number()
-    .precision(2) 
+    .precision(2)
     .min(0)
     .required()
     .messages({
@@ -161,7 +161,7 @@ const transactionSchema = joi.object({
 
   amount: joi.number()
     .positive()
-    .precision(2) 
+    .precision(2)
     .required()
     .messages({
       'number.base': 'Amount must be a number.',
@@ -244,4 +244,4 @@ const validateLogin = (req, res, next) => {
 };
 
 
-module.exports = { validateUser, validateBankAccount, validateTransaction, validateBankPatchAccount , validateLogin , validateResetPassword };
+module.exports = { validateUser, validateBankAccount, validateTransaction, validateBankPatchAccount, validateLogin, validateResetPassword };

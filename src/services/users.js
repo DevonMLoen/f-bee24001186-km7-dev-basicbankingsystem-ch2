@@ -11,21 +11,6 @@ class User {
 
   }
 
-  async createUser() {
-    try {
-      const newUser = await this.prisma.user.create({
-        data: {
-          userName: this.name,
-          userEmail: this.email,
-          userPassword: this.password,
-        },
-      });
-      return newUser;
-    } catch (error) {
-      throw new Error('Failed to create user : ' + error.message);
-    }
-  }
-
   async createUserWithProfile(profileData) {
     try {
     const existingEmail = await User.prisma.user.findUnique({

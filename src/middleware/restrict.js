@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = process.env
 
-module.exports = async (req , res , next) => {
+module.exports = async (req, res, next) => {
     const { authorization } = req.headers;
-    if (!authorization){
+    if (!authorization) {
         return res.status(401).json({
             status: false,
             message: 'you\'re not authorized',
@@ -11,8 +11,8 @@ module.exports = async (req , res , next) => {
         });
     }
 
-    jwt.verify(authorization , JWT_SECRET , (err , decoded) => {
-        if(err){
+    jwt.verify(authorization, JWT_SECRET, (err, decoded) => {
+        if (err) {
             return res.status(401).json({
                 status: false,
                 message: 'you\'re not authorized',
