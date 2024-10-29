@@ -245,17 +245,6 @@ describe('BankAccount Class', () => {
             await expect(BankAccount.deposit(bankAccountId, -100)).rejects.toThrow('Failed to deposit from bank account : Amount must be greater than zero');
         });
 
-        test('should throw an error if insufficient balance for deposit', async () => {
-            BankAccount.prisma.bankAccount.findUnique.mockResolvedValue({
-                bankAccountId,
-                balance: 100, 
-            });
-    
-            const amountToDeposit = 200;
-    
-            await expect(BankAccount.deposit(bankAccountId, amountToDeposit)).rejects.toThrow('Failed to deposit from bank account : Insufficient balance');
-        });
-
         test('should deposit amount successfully', async () => {
             const bankAccountId = 1;
             const amount = 500;

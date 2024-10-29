@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const morgan = require('morgan');
 const path = require('path');
 const prisma = require('./db')
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocs = require("../swagger.json");
 
 const app = express();
 
@@ -18,6 +20,9 @@ const authRoutes = require("./routes/auth.js");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
+
+//SWAGGER
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //EJS VIEWS
 app.set('view engine', 'ejs');
