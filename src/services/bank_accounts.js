@@ -11,7 +11,7 @@ class BankAccount {
 
     async validateUser() {
         const user = await BankAccount.prisma.user.findUnique({
-            where: { userId: this.id },
+            where: { userId: parseInt(this.id) },
         });
         if (!user) {
             throw new Error('User not found');
@@ -25,7 +25,7 @@ class BankAccount {
 
             const newAccount = await BankAccount.prisma.bankAccount.create({
                 data: {
-                    userId: this.id,
+                    userId: parseInt(this.id),
                     bankName: this.name,
                     bankAccountNumber: this.number,
                     balance: this.balance,
@@ -174,10 +174,6 @@ class BankAccount {
 
             if (amount <= 0) {
                 throw new Error('Amount must be greater than zero');
-            }
-
-            if (bankAccount.balance < amount) {
-                throw new Error('Insufficient balance');
             }
 
             const updatedAccount = await BankAccount.prisma.bankAccount.update({

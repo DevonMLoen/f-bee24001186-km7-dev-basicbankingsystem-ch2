@@ -13,6 +13,7 @@ yarn-error.log*
 
 # Environment variables
 .env
+.env.local
 
 # Build output
 dist

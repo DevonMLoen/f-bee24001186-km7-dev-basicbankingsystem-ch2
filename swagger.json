@@ -1,0 +1,2554 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Bank Account Project",
+    "description": "# 🚀 Get started here\n\nThe Bank Account API is a secure and efficient solution for managing financial transactions and user accounts. This API allows users to authenticate, create and manage bank accounts, process transactions, and manage user information. Key features include user registration, login, password recovery, account creation, balance monitoring, and transaction tracking. Designed for seamless integration, the Bank Account API ensures a user-friendly experience while providing robust security and data management capabilities.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "servers": [
+    {
+      "url": "http://localhost:2000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/api/v1/auths/login": {
+      "post": {
+        "tags": [
+          "Auths"
+        ],
+        "summary": "Login",
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data.",
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "supersecurepassword"
+                  }
+                }
+              },
+              "examples": {
+                "Login": {
+                  "value": {
+                    "email": "john.doe@example.com",
+                    "password": "supersecurepassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTczMDIxMjY1MywiZXhwIjoxNzMwMjE2MjUzfQ.IobSw9RAdPgbDgew3ImphIyDtT9sE1m3V2EMqKqYywM"
+                    },
+                    "userId": {
+                      "type": "number",
+                      "example": 1
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImlhdCI6MTczMDIxMjY1MywiZXhwIjoxNzMwMjE2MjUzfQ.IobSw9RAdPgbDgew3ImphIyDtT9sE1m3V2EMqKqYywM",
+                      "userId": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {}
+        ]
+      }
+    },
+    "/api/v1/auths/logout": {
+      "post": {
+        "tags": [
+          "Auths"
+        ],
+        "summary": "Logout",
+        "description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code.",
+        "operationId": "logout",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Add your name in the body"
+                  }
+                }
+              },
+              "examples": {
+                "Logout": {
+                  "value": ""
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "message": "Logout successful"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auths/reset-password": {
+      "post": {
+        "tags": [
+          "Auths"
+        ],
+        "summary": "ResetPassword",
+        "description": "This is a PUT request and it is used to overwrite an existing piece of data. For instance, after you create an entity with a POST request, you may want to modify that later. You can do that using a PUT request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful PUT request typically returns a `200 OK`, `201 Created`, or `204 No Content` response code.",
+        "operationId": "resetpassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "newPassword": {
+                    "type": "string",
+                    "example": "PASSWORD"
+                  }
+                }
+              },
+              "examples": {
+                "ResetPassword": {
+                  "value": {
+                    "newPassword": "PASSWORD"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password successfully reset"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "message": "Password successfully reset"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "err": {
+                      "type": "string",
+                      "example": "jwt malformed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "err": "jwt malformed",
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auths/forgot-password": {
+      "post": {
+        "tags": [
+          "Auths"
+        ],
+        "summary": "ForgotPassword",
+        "description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code.",
+        "operationId": "forgotpassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "ForgotPassword": {
+                  "value": ""
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password reset email has been sent"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "message": "Password reset email has been sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auths/signup": {
+      "post": {
+        "tags": [
+          "Auths"
+        ],
+        "summary": "Signup",
+        "description": "Signup",
+        "operationId": "signup",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "address": {
+                    "type": "string",
+                    "example": "123 Main St, Anytown, USA"
+                  },
+                  "profileNumber": {
+                    "type": "string",
+                    "example": "1234567890"
+                  },
+                  "profileType": {
+                    "type": "string",
+                    "example": "individual"
+                  },
+                  "userEmail": {
+                    "type": "string",
+                    "example": "devondoe@example.com"
+                  },
+                  "userName": {
+                    "type": "string",
+                    "example": "Devon Doe"
+                  },
+                  "userPassword": {
+                    "type": "string",
+                    "example": "yourSecurePassword"
+                  }
+                }
+              },
+              "examples": {
+                "Signup": {
+                  "value": {
+                    "address": "123 Main St, Anytown, USA",
+                    "profileNumber": "1234567890",
+                    "profileType": "individual",
+                    "userEmail": "devondoe@example.com",
+                    "userName": "Devon Doe",
+                    "userPassword": "yourSecurePassword"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "newProfile": {
+                      "type": "object",
+                      "properties": {
+                        "address": {
+                          "type": "string",
+                          "example": "123 Main St, Anytown, USA"
+                        },
+                        "profileId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "profileNumber": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "profileType": {
+                          "type": "string",
+                          "example": "individual"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 2
+                        }
+                      }
+                    },
+                    "newUser": {
+                      "type": "object",
+                      "properties": {
+                        "userEmail": {
+                          "type": "string",
+                          "example": "devondoe@example.com"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "userName": {
+                          "type": "string",
+                          "example": "Devon Doe"
+                        },
+                        "userPassword": {
+                          "type": "string",
+                          "example": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "newProfile": {
+                        "address": "123 Main St, Anytown, USA",
+                        "profileId": 2,
+                        "profileNumber": "1234567890",
+                        "profileType": "individual",
+                        "userId": 2
+                      },
+                      "newUser": {
+                        "userEmail": "devondoe@example.com",
+                        "userId": 2,
+                        "userName": "Devon Doe",
+                        "userPassword": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auths/whoami": {
+      "get": {
+        "tags": [
+          "Auths"
+        ],
+        "summary": "Whoami",
+        "description": "Whoami",
+        "operationId": "whoami",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "example": "john.doe@example.com"
+                            },
+                            "exp": {
+                              "type": "number",
+                              "example": 1730217745
+                            },
+                            "iat": {
+                              "type": "number",
+                              "example": 1730214145
+                            },
+                            "id": {
+                              "type": "number",
+                              "example": 1
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "error": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "OK"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "data": {
+                        "user": {
+                          "email": "john.doe@example.com",
+                          "exp": 1730217745,
+                          "iat": 1730214145,
+                          "id": 1
+                        }
+                      },
+                      "error": null,
+                      "message": "OK",
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts": {
+      "get": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "GetallAccounts",
+        "description": "GetallAccounts",
+        "operationId": "getallaccounts",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "balance": {
+                        "type": "number",
+                        "example": 1000
+                      },
+                      "bankAccountId": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "bankAccountNumber": {
+                        "type": "string",
+                        "example": "9876543210"
+                      },
+                      "bankName": {
+                        "type": "string",
+                        "example": "Bank ABC"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "userEmail": {
+                            "type": "string",
+                            "example": "devondoe@example.com"
+                          },
+                          "userId": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "userName": {
+                            "type": "string",
+                            "example": "Devon Doe"
+                          },
+                          "userPassword": {
+                            "type": "string",
+                            "example": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                          }
+                        }
+                      },
+                      "userId": {
+                        "type": "number",
+                        "example": 2
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "balance": 1000,
+                      "bankAccountId": 1,
+                      "bankAccountNumber": "9876543210",
+                      "bankName": "Bank ABC",
+                      "user": {
+                        "userEmail": "devondoe@example.com",
+                        "userId": 2,
+                        "userName": "Devon Doe",
+                        "userPassword": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                      },
+                      "userId": 2
+                    }
+                  ]
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": [
+                      {
+                        "balance": 1000,
+                        "bankAccountId": 1,
+                        "bankAccountNumber": "9876543210",
+                        "bankName": "Bank ABC",
+                        "user": {
+                          "userEmail": "devondoe@example.com",
+                          "userId": 2,
+                          "userName": "Devon Doe",
+                          "userPassword": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                        },
+                        "userId": 2
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "CreateAccount",
+        "description": "CreateAccount",
+        "operationId": "createaccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "balance": {
+                    "type": "number",
+                    "example": 1000
+                  },
+                  "bankAccountNumber": {
+                    "type": "string",
+                    "example": "9876543210"
+                  },
+                  "bankName": {
+                    "type": "string",
+                    "example": "Bank ABC"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "example": "1"
+                  }
+                }
+              },
+              "examples": {
+                "CreateAccount": {
+                  "value": {
+                    "balance": 1000,
+                    "bankAccountNumber": "9876543210",
+                    "bankName": "Bank ABC",
+                    "userId": "1"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "balance": {
+                      "type": "number",
+                      "example": 1000
+                    },
+                    "bankAccountId": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "bankAccountNumber": {
+                      "type": "string",
+                      "example": "9876543210"
+                    },
+                    "bankName": {
+                      "type": "string",
+                      "example": "Bank ABC"
+                    },
+                    "userId": {
+                      "type": "number",
+                      "example": 2
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "balance": 1000,
+                      "bankAccountId": 1,
+                      "bankAccountNumber": "9876543210",
+                      "bankName": "Bank ABC",
+                      "userId": 2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/1": {
+      "get": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "GetAccountById",
+        "description": "GetAccountById",
+        "operationId": "getaccountbyid",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "GetAccountById": {
+                  "value": ""
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "bankAccount": {
+                      "type": "object",
+                      "properties": {
+                        "balance": {
+                          "type": "number",
+                          "example": 1000
+                        },
+                        "bankAccountId": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "bankAccountNumber": {
+                          "type": "string",
+                          "example": "9876543210"
+                        },
+                        "bankName": {
+                          "type": "string",
+                          "example": "Bank ABC"
+                        },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "userEmail": {
+                              "type": "string",
+                              "example": "devondoe@example.com"
+                            },
+                            "userId": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "userName": {
+                              "type": "string",
+                              "example": "Devon Doe"
+                            },
+                            "userPassword": {
+                              "type": "string",
+                              "example": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                            }
+                          }
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 2
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "bankAccount": {
+                        "balance": 1000,
+                        "bankAccountId": 1,
+                        "bankAccountNumber": "9876543210",
+                        "bankName": "Bank ABC",
+                        "user": {
+                          "userEmail": "devondoe@example.com",
+                          "userId": 2,
+                          "userName": "Devon Doe",
+                          "userPassword": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                        },
+                        "userId": 2
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "DeleteAccountById",
+        "description": "DeleteAccountById",
+        "operationId": "deleteaccountbyid",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "DeleteAccountById": {
+                  "value": ""
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Bank account successfully deleted"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "message": "Bank account successfully deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "UpdateAccount",
+        "description": "UpdateAccount",
+        "operationId": "updateaccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "balance": {
+                    "type": "number",
+                    "example": 1500
+                  },
+                  "bankAccountNumber": {
+                    "type": "string",
+                    "example": "1234567890"
+                  },
+                  "bankName": {
+                    "type": "string",
+                    "example": "Bank XYZ"
+                  }
+                }
+              },
+              "examples": {
+                "UpdateAccount": {
+                  "value": {
+                    "balance": 1500,
+                    "bankAccountNumber": "1234567890",
+                    "bankName": "Bank XYZ"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "type": "object",
+                      "properties": {
+                        "balance": {
+                          "type": "number",
+                          "example": 1500
+                        },
+                        "bankAccountId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "bankAccountNumber": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "bankName": {
+                          "type": "string",
+                          "example": "Bank XYZ"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bank account successfully updated"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "account": {
+                        "balance": 1500,
+                        "bankAccountId": 2,
+                        "bankAccountNumber": "1234567890",
+                        "bankName": "Bank XYZ",
+                        "userId": 1
+                      },
+                      "message": "Bank account successfully updated"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/1/withdraw": {
+      "patch": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "Withdraw",
+        "description": "Withdraw",
+        "operationId": "withdraw",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "example": 1000
+                  }
+                }
+              },
+              "examples": {
+                "Withdraw": {
+                  "value": {
+                    "amount": 1000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "type": "object",
+                      "properties": {
+                        "balance": {
+                          "type": "number",
+                          "example": 500
+                        },
+                        "bankAccountId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "bankAccountNumber": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "bankName": {
+                          "type": "string",
+                          "example": "Bank XYZ"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bank account Withdraw successfully"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "account": {
+                        "balance": 500,
+                        "bankAccountId": 2,
+                        "bankAccountNumber": "1234567890",
+                        "bankName": "Bank XYZ",
+                        "userId": 1
+                      },
+                      "message": "Bank account Withdraw successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/accounts/1/deposit": {
+      "patch": {
+        "tags": [
+          "Bank_Accounts"
+        ],
+        "summary": "Deposit",
+        "description": "Deposit",
+        "operationId": "deposit",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "example": 1000
+                  }
+                }
+              },
+              "examples": {
+                "Deposit": {
+                  "value": {
+                    "amount": 1000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "account": {
+                      "type": "object",
+                      "properties": {
+                        "balance": {
+                          "type": "number",
+                          "example": 10500
+                        },
+                        "bankAccountId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "bankAccountNumber": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "bankName": {
+                          "type": "string",
+                          "example": "Bank XYZ"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Bank account Deposit successfully"
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "account": {
+                        "balance": 10500,
+                        "bankAccountId": 2,
+                        "bankAccountNumber": "1234567890",
+                        "bankName": "Bank XYZ",
+                        "userId": 1
+                      },
+                      "message": "Bank account Deposit successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "GetAllTransactions",
+        "description": "GetAllTransactions",
+        "operationId": "getalltransactions",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "amount": {
+                        "type": "number",
+                        "example": 250
+                      },
+                      "bankAccountDestination": {
+                        "type": "object",
+                        "properties": {
+                          "balance": {
+                            "type": "number",
+                            "example": 1250
+                          },
+                          "bankAccountId": {
+                            "type": "number",
+                            "example": 3
+                          },
+                          "bankAccountNumber": {
+                            "type": "string",
+                            "example": "9876543210"
+                          },
+                          "bankName": {
+                            "type": "string",
+                            "example": "Bank ABC"
+                          },
+                          "userId": {
+                            "type": "number",
+                            "example": 1
+                          }
+                        }
+                      },
+                      "bankAccountSource": {
+                        "type": "object",
+                        "properties": {
+                          "balance": {
+                            "type": "number",
+                            "example": 10250
+                          },
+                          "bankAccountId": {
+                            "type": "number",
+                            "example": 2
+                          },
+                          "bankAccountNumber": {
+                            "type": "string",
+                            "example": "1234567890"
+                          },
+                          "bankName": {
+                            "type": "string",
+                            "example": "Bank XYZ"
+                          },
+                          "userId": {
+                            "type": "number",
+                            "example": 1
+                          }
+                        }
+                      },
+                      "destinationAccountId": {
+                        "type": "number",
+                        "example": 3
+                      },
+                      "sourceAccountId": {
+                        "type": "number",
+                        "example": 2
+                      },
+                      "transactionId": {
+                        "type": "number",
+                        "example": 1
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "amount": 250,
+                      "bankAccountDestination": {
+                        "balance": 1250,
+                        "bankAccountId": 3,
+                        "bankAccountNumber": "9876543210",
+                        "bankName": "Bank ABC",
+                        "userId": 1
+                      },
+                      "bankAccountSource": {
+                        "balance": 10250,
+                        "bankAccountId": 2,
+                        "bankAccountNumber": "1234567890",
+                        "bankName": "Bank XYZ",
+                        "userId": 1
+                      },
+                      "destinationAccountId": 3,
+                      "sourceAccountId": 2,
+                      "transactionId": 1
+                    }
+                  ]
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": [
+                      {
+                        "amount": 250,
+                        "bankAccountDestination": {
+                          "balance": 1250,
+                          "bankAccountId": 3,
+                          "bankAccountNumber": "9876543210",
+                          "bankName": "Bank ABC",
+                          "userId": 1
+                        },
+                        "bankAccountSource": {
+                          "balance": 10250,
+                          "bankAccountId": 2,
+                          "bankAccountNumber": "1234567890",
+                          "bankName": "Bank XYZ",
+                          "userId": 1
+                        },
+                        "destinationAccountId": 3,
+                        "sourceAccountId": 2,
+                        "transactionId": 1
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "CreateTransaction",
+        "description": "CreateTransaction",
+        "operationId": "createtransaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "number",
+                    "example": 250
+                  },
+                  "destinationAccountId": {
+                    "type": "string",
+                    "example": "3"
+                  },
+                  "sourceAccountId": {
+                    "type": "string",
+                    "example": "2"
+                  }
+                }
+              },
+              "examples": {
+                "CreateTransaction": {
+                  "value": {
+                    "amount": 250,
+                    "destinationAccountId": "3",
+                    "sourceAccountId": "2"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction successful"
+                    },
+                    "transaction": {
+                      "type": "object",
+                      "properties": {
+                        "amount": {
+                          "type": "number",
+                          "example": 250
+                        },
+                        "destinationAccountId": {
+                          "type": "number",
+                          "example": 3
+                        },
+                        "sourceAccountId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "transactionId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "message": "Transaction successful",
+                      "transaction": {
+                        "amount": 250,
+                        "destinationAccountId": 3,
+                        "sourceAccountId": 2,
+                        "transactionId": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transactions/1": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "GetTransactionById",
+        "description": "GetTransactionById",
+        "operationId": "gettransactionbyid",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transaction": {
+                      "type": "object",
+                      "properties": {
+                        "amount": {
+                          "type": "number",
+                          "example": 250
+                        },
+                        "bankAccountDestination": {
+                          "type": "object",
+                          "properties": {
+                            "balance": {
+                              "type": "number",
+                              "example": 1250
+                            },
+                            "bankAccountId": {
+                              "type": "number",
+                              "example": 3
+                            },
+                            "bankAccountNumber": {
+                              "type": "string",
+                              "example": "9876543210"
+                            },
+                            "bankName": {
+                              "type": "string",
+                              "example": "Bank ABC"
+                            },
+                            "userId": {
+                              "type": "number",
+                              "example": 1
+                            }
+                          }
+                        },
+                        "bankAccountSource": {
+                          "type": "object",
+                          "properties": {
+                            "balance": {
+                              "type": "number",
+                              "example": 10250
+                            },
+                            "bankAccountId": {
+                              "type": "number",
+                              "example": 2
+                            },
+                            "bankAccountNumber": {
+                              "type": "string",
+                              "example": "1234567890"
+                            },
+                            "bankName": {
+                              "type": "string",
+                              "example": "Bank XYZ"
+                            },
+                            "userId": {
+                              "type": "number",
+                              "example": 1
+                            }
+                          }
+                        },
+                        "destinationAccountId": {
+                          "type": "number",
+                          "example": 3
+                        },
+                        "sourceAccountId": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "transactionId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "transaction": {
+                        "amount": 250,
+                        "bankAccountDestination": {
+                          "balance": 1250,
+                          "bankAccountId": 3,
+                          "bankAccountNumber": "9876543210",
+                          "bankName": "Bank ABC",
+                          "userId": 1
+                        },
+                        "bankAccountSource": {
+                          "balance": 10250,
+                          "bankAccountId": 2,
+                          "bankAccountNumber": "1234567890",
+                          "bankName": "Bank XYZ",
+                          "userId": 1
+                        },
+                        "destinationAccountId": 3,
+                        "sourceAccountId": 2,
+                        "transactionId": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "GetAllUsers",
+        "description": "GetAllUsers",
+        "operationId": "getallusers",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "profile": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "address": {
+                              "type": "string",
+                              "example": "123 Main St"
+                            },
+                            "profileId": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "profileNumber": {
+                              "type": "string",
+                              "example": "12345"
+                            },
+                            "profileType": {
+                              "type": "string",
+                              "example": "Personal"
+                            },
+                            "userId": {
+                              "type": "number",
+                              "example": 1
+                            }
+                          }
+                        },
+                        "example": [
+                          {
+                            "address": "123 Main St",
+                            "profileId": 1,
+                            "profileNumber": "12345",
+                            "profileType": "Personal",
+                            "userId": 1
+                          }
+                        ]
+                      },
+                      "userEmail": {
+                        "type": "string",
+                        "example": "john.doe@example.com"
+                      },
+                      "userId": {
+                        "type": "number",
+                        "example": 1
+                      },
+                      "userName": {
+                        "type": "string",
+                        "example": "Jane Doe"
+                      },
+                      "userPassword": {
+                        "type": "string",
+                        "example": "$2b$10$B7a02Ukb/oI7tAdwQSVoPeqoPVYg0LwdDrM0f43qbkJfyS6wjmBFC"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "profile": [
+                        {
+                          "address": "123 Main St",
+                          "profileId": 1,
+                          "profileNumber": "12345",
+                          "profileType": "Personal",
+                          "userId": 1
+                        }
+                      ],
+                      "userEmail": "john.doe@example.com",
+                      "userId": 1,
+                      "userName": "Jane Doe",
+                      "userPassword": "$2b$10$B7a02Ukb/oI7tAdwQSVoPeqoPVYg0LwdDrM0f43qbkJfyS6wjmBFC"
+                    },
+                    {
+                      "profile": [
+                        {
+                          "address": "123 Main St, Anytown, USA",
+                          "profileId": 2,
+                          "profileNumber": "1234567890",
+                          "profileType": "individual",
+                          "userId": 2
+                        }
+                      ],
+                      "userEmail": "devondoe@example.com",
+                      "userId": 2,
+                      "userName": "Devon Doe",
+                      "userPassword": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                    }
+                  ]
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": [
+                      {
+                        "profile": [
+                          {
+                            "address": "123 Main St",
+                            "profileId": 1,
+                            "profileNumber": "12345",
+                            "profileType": "Personal",
+                            "userId": 1
+                          }
+                        ],
+                        "userEmail": "john.doe@example.com",
+                        "userId": 1,
+                        "userName": "Jane Doe",
+                        "userPassword": "$2b$10$B7a02Ukb/oI7tAdwQSVoPeqoPVYg0LwdDrM0f43qbkJfyS6wjmBFC"
+                      },
+                      {
+                        "profile": [
+                          {
+                            "address": "123 Main St, Anytown, USA",
+                            "profileId": 2,
+                            "profileNumber": "1234567890",
+                            "profileType": "individual",
+                            "userId": 2
+                          }
+                        ],
+                        "userEmail": "devondoe@example.com",
+                        "userId": 2,
+                        "userName": "Devon Doe",
+                        "userPassword": "$2b$10$VWq/AvAWGbU01X5v1PXXTuV7V9RV/wEGpZzDh3IkBSCVYXiZ7vUVS"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/1": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "GetUserById",
+        "description": "GetUserById",
+        "operationId": "getuserbyid",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "bankAccount": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "balance": {
+                                "type": "number",
+                                "example": 10250
+                              },
+                              "bankAccountId": {
+                                "type": "number",
+                                "example": 2
+                              },
+                              "bankAccountNumber": {
+                                "type": "string",
+                                "example": "1234567890"
+                              },
+                              "bankName": {
+                                "type": "string",
+                                "example": "Bank XYZ"
+                              },
+                              "transactionDestination": {
+                                "type": "array",
+                                "items": {},
+                                "example": []
+                              },
+                              "transactionSource": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "amount": {
+                                      "type": "number",
+                                      "example": 250
+                                    },
+                                    "destinationAccountId": {
+                                      "type": "number",
+                                      "example": 3
+                                    },
+                                    "sourceAccountId": {
+                                      "type": "number",
+                                      "example": 2
+                                    },
+                                    "transactionId": {
+                                      "type": "number",
+                                      "example": 1
+                                    }
+                                  }
+                                },
+                                "example": [
+                                  {
+                                    "amount": 250,
+                                    "destinationAccountId": 3,
+                                    "sourceAccountId": 2,
+                                    "transactionId": 1
+                                  }
+                                ]
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "balance": 10250,
+                              "bankAccountId": 2,
+                              "bankAccountNumber": "1234567890",
+                              "bankName": "Bank XYZ",
+                              "transactionDestination": [],
+                              "transactionSource": [
+                                {
+                                  "amount": 250,
+                                  "destinationAccountId": 3,
+                                  "sourceAccountId": 2,
+                                  "transactionId": 1
+                                }
+                              ],
+                              "userId": 1
+                            },
+                            {
+                              "balance": 1250,
+                              "bankAccountId": 3,
+                              "bankAccountNumber": "9876543210",
+                              "bankName": "Bank ABC",
+                              "transactionDestination": [
+                                {
+                                  "amount": 250,
+                                  "destinationAccountId": 3,
+                                  "sourceAccountId": 2,
+                                  "transactionId": 1
+                                }
+                              ],
+                              "transactionSource": [],
+                              "userId": 1
+                            }
+                          ]
+                        },
+                        "profile": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "address": {
+                                "type": "string",
+                                "example": "123 Main St"
+                              },
+                              "profileId": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "profileNumber": {
+                                "type": "string",
+                                "example": "12345"
+                              },
+                              "profileType": {
+                                "type": "string",
+                                "example": "Personal"
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              }
+                            }
+                          },
+                          "example": [
+                            {
+                              "address": "123 Main St",
+                              "profileId": 1,
+                              "profileNumber": "12345",
+                              "profileType": "Personal",
+                              "userId": 1
+                            }
+                          ]
+                        },
+                        "userEmail": {
+                          "type": "string",
+                          "example": "john.doe@example.com"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "userName": {
+                          "type": "string",
+                          "example": "Jane Doe"
+                        },
+                        "userPassword": {
+                          "type": "string",
+                          "example": "$2b$10$B7a02Ukb/oI7tAdwQSVoPeqoPVYg0LwdDrM0f43qbkJfyS6wjmBFC"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "user": {
+                        "bankAccount": [
+                          {
+                            "balance": 10250,
+                            "bankAccountId": 2,
+                            "bankAccountNumber": "1234567890",
+                            "bankName": "Bank XYZ",
+                            "transactionDestination": [],
+                            "transactionSource": [
+                              {
+                                "amount": 250,
+                                "destinationAccountId": 3,
+                                "sourceAccountId": 2,
+                                "transactionId": 1
+                              }
+                            ],
+                            "userId": 1
+                          },
+                          {
+                            "balance": 1250,
+                            "bankAccountId": 3,
+                            "bankAccountNumber": "9876543210",
+                            "bankName": "Bank ABC",
+                            "transactionDestination": [
+                              {
+                                "amount": 250,
+                                "destinationAccountId": 3,
+                                "sourceAccountId": 2,
+                                "transactionId": 1
+                              }
+                            ],
+                            "transactionSource": [],
+                            "userId": 1
+                          }
+                        ],
+                        "profile": [
+                          {
+                            "address": "123 Main St",
+                            "profileId": 1,
+                            "profileNumber": "12345",
+                            "profileType": "Personal",
+                            "userId": 1
+                          }
+                        ],
+                        "userEmail": "john.doe@example.com",
+                        "userId": 1,
+                        "userName": "Jane Doe",
+                        "userPassword": "$2b$10$B7a02Ukb/oI7tAdwQSVoPeqoPVYg0LwdDrM0f43qbkJfyS6wjmBFC"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/1/views": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "RenderUser",
+        "description": "RenderUser",
+        "operationId": "renderuser",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>User Details - Jane Doe</title>\r\n    <link rel=\"stylesheet\" href=\"/styles.css\">\r\n</head>\r\n\r\n<body>\r\n    <header>\r\n        <h1>User Details</h1>\r\n    </header>\r\n    <main>\r\n        <section class=\"user-details\">\r\n            <h2>Jane Doe</h2>\r\n            <p>Email: john.doe@example.com</p>\r\n            <h3>Profile Information</h3>\r\n            <p>Type: Personal</p>\r\n            <p>Profile Number: 12345</p>\r\n            <p>Address: 123 Main St</p>\r\n\r\n            <h3>Bank Account Information</h3>\r\n            <ul>\r\n\r\n                <li class=\"account-entry\">\r\n                    <p><strong>Bank Name:</strong> Bank XYZ</p>\r\n                    <p><strong>Account Number:</strong> 1234567890</p>\r\n                    <p><strong>Balance:</strong> $10250.00</p>\r\n\r\n                    <hr class=\"account-divider\">\r\n\r\n                </li>\r\n\r\n                <li class=\"account-entry\">\r\n                    <p><strong>Bank Name:</strong> Bank ABC</p>\r\n                    <p><strong>Account Number:</strong> 9876543210</p>\r\n                    <p><strong>Balance:</strong> $1250.00</p>\r\n\r\n                </li>\r\n\r\n            </ul>\r\n\r\n            <a href=\"/\">Back to Home</a>\r\n        </section>\r\n    </main>\r\n    <footer>\r\n        <p>&copy; 2024 Binar Banking App</p>\r\n    </footer>\r\n</body>\r\n\r\n</html>"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-docs": {
+      "get": {
+        "tags": [
+          "Index"
+        ],
+        "summary": "Api-Docs",
+        "description": "Api-Docs",
+        "operationId": "apiDocs",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": "<!-- HTML for static distribution bundle build -->\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n\r\n    <title>Swagger UI</title>\r\n    <link rel=\"stylesheet\" type=\"text/css\" href=\"./swagger-ui.css\">\r\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-32x32.png\" sizes=\"32x32\" />\r\n    <link rel=\"icon\" type=\"image/png\" href=\"./favicon-16x16.png\" sizes=\"16x16\" />\r\n    <style>\r\n        html {\r\n            box-sizing: border-box;\r\n            overflow: -moz-scrollbars-vertical;\r\n            overflow-y: scroll;\r\n        }\r\n\r\n        *,\r\n        *:before,\r\n        *:after {\r\n            box-sizing: inherit;\r\n        }\r\n\r\n        body {\r\n            margin: 0;\r\n            background: #fafafa;\r\n        }\r\n    </style>\r\n</head>\r\n\r\n<body>\r\n\r\n    <svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\r\n        style=\"position:absolute;width:0;height:0\">\r\n        <defs>\r\n            <symbol viewBox=\"0 0 20 20\" id=\"unlocked\">\r\n                <path\r\n                    d=\"M15.8 8H14V5.6C14 2.703 12.665 1 10 1 7.334 1 6 2.703 6 5.6V6h2v-.801C8 3.754 8.797 3 10 3c1.203 0 2 .754 2 2.199V8H4c-.553 0-1 .646-1 1.199V17c0 .549.428 1.139.951 1.307l1.197.387C5.672 18.861 6.55 19 7.1 19h5.8c.549 0 1.428-.139 1.951-.307l1.196-.387c.524-.167.953-.757.953-1.306V9.199C17 8.646 16.352 8 15.8 8z\">\r\n                </path>\r\n            </symbol>\r\n\r\n            <symbol viewBox=\"0 0 20 20\" id=\"locked\">\r\n                <path\r\n                    d=\"M15.8 8H14V5.6C14 2.703 12.665 1 10 1 7.334 1 6 2.703 6 5.6V8H4c-.553 0-1 .646-1 1.199V17c0 .549.428 1.139.951 1.307l1.197.387C5.672 18.861 6.55 19 7.1 19h5.8c.549 0 1.428-.139 1.951-.307l1.196-.387c.524-.167.953-.757.953-1.306V9.199C17 8.646 16.352 8 15.8 8zM12 8H8V5.199C8 3.754 8.797 3 10 3c1.203 0 2 .754 2 2.199V8z\" />\r\n            </symbol>\r\n\r\n            <symbol viewBox=\"0 0 20 20\" id=\"close\">\r\n                <path\r\n                    d=\"M14.348 14.849c-.469.469-1.229.469-1.697 0L10 11.819l-2.651 3.029c-.469.469-1.229.469-1.697 0-.469-.469-.469-1.229 0-1.697l2.758-3.15-2.759-3.152c-.469-.469-.469-1.228 0-1.697.469-.469 1.228-.469 1.697 0L10 8.183l2.651-3.031c.469-.469 1.228-.469 1.697 0 .469.469.469 1.229 0 1.697l-2.758 3.152 2.758 3.15c.469.469.469 1.229 0 1.698z\" />\r\n            </symbol>\r\n\r\n            <symbol viewBox=\"0 0 20 20\" id=\"large-arrow\">\r\n                <path\r\n                    d=\"M13.25 10L6.109 2.58c-.268-.27-.268-.707 0-.979.268-.27.701-.27.969 0l7.83 7.908c.268.271.268.709 0 .979l-7.83 7.908c-.268.271-.701.27-.969 0-.268-.269-.268-.707 0-.979L13.25 10z\" />\r\n            </symbol>\r\n\r\n            <symbol viewBox=\"0 0 20 20\" id=\"large-arrow-down\">\r\n                <path\r\n                    d=\"M17.418 6.109c.272-.268.709-.268.979 0s.271.701 0 .969l-7.908 7.83c-.27.268-.707.268-.979 0l-7.908-7.83c-.27-.268-.27-.701 0-.969.271-.268.709-.268.979 0L10 13.25l7.418-7.141z\" />\r\n            </symbol>\r\n\r\n\r\n            <symbol viewBox=\"0 0 24 24\" id=\"jump-to\">\r\n                <path d=\"M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z\" />\r\n            </symbol>\r\n\r\n            <symbol viewBox=\"0 0 24 24\" id=\"expand\">\r\n                <path d=\"M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z\" />\r\n            </symbol>\r\n\r\n        </defs>\r\n    </svg>\r\n\r\n    <div id=\"swagger-ui\"></div>\r\n\r\n    <script src=\"./swagger-ui-bundle.js\"> </script>\r\n    <script src=\"./swagger-ui-standalone-preset.js\"> </script>\r\n    <script src=\"./swagger-ui-init.js\"> </script>\r\n\r\n\r\n\r\n    <style>\r\n        .swagger-ui .topbar .download-url-wrapper {\r\n            display: none\r\n        }\r\n\r\n        undefined\r\n    </style>\r\n</body>\r\n\r\n</html>"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Index"
+        ],
+        "summary": "IndexView",
+        "description": "IndexView",
+        "operationId": "indexview",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n    <title>Home - My Banking App</title>\r\n    <link rel=\"stylesheet\" href=\"/styles.css\">\r\n</head>\r\n\r\n<body>\r\n    <header>\r\n        <h1>Welcome to Binar Banking App</h1>\r\n    </header>\r\n    <main>\r\n        <section>\r\n            <h2>Available Users</h2>\r\n            <ul>\r\n\r\n                <li><a href=\"/api/v1/users/1/views\">View Jane Doe</a></li>\r\n\r\n                <li><a href=\"/api/v1/users/2/views\">View Devon Doe</a></li>\r\n\r\n            </ul>\r\n        </section>\r\n    </main>\r\n    <footer>\r\n        <p>&copy; 2024 Binar Banking App</p>\r\n    </footer>\r\n</body>\r\n\r\n</html>"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },  
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "userName": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "userEmail": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "userPassword": {
+            "type": "string",
+            "example": "securepassword123"
+          }
+        }
+      },
+      "Profile": {
+        "type": "object",
+        "properties": {
+          "profileId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "profileType": {
+            "type": "string",
+            "example": "personal"
+          },
+          "profileNumber": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Main St, Anytown, USA"
+          }
+        }
+      },
+      "BankAccount": {
+        "type": "object",
+        "properties": {
+          "bankAccountId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "bankName": {
+            "type": "string",
+            "example": "Bank of Example"
+          },
+          "bankAccountNumber": {
+            "type": "string",
+            "example": "9876543210"
+          },
+          "balance": {
+            "type": "number",
+            "format": "float",
+            "example": 1000.50
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "sourceAccountId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "destinationAccountId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 2
+          },
+          "amount": {
+            "type": "number",
+            "format": "float",
+            "example": 200.00
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auths",
+      "description": "This folder contains all authentication-related endpoints, including user registration, login, logout, password management, and user identity verification.\n\n1. **POST /api/v1/auths/login**: Authenticates a user based on provided login credentials.\n    \n2. **POST /api/v1/auths/logout**: Logs out an authenticated user, ending their session.\n    \n3. **POST /api/v1/auths/reset-password**: Allows an authenticated user to change their password.\n    \n4. **POST /api/v1/auths/forgot-password**: Enables password reset via email for users who have forgotten their passwords.\n    \n5. **GET /api/v1/auths/whoami**: Returns user identity information for the currently authenticated session.\n    \n6. **POST /api/v1/auths/signup**: Registers a new user with the provided details.\n    \n\nEach endpoint incorporates middleware functions to validate input data and restrict access where necessary."
+    },
+    {
+      "name": "Bank_Accounts",
+      "description": "This folder provides endpoints for managing bank accounts, including viewing, creating, updating, deleting, and handling transactions such as deposits and withdrawals.\n\n1. **GET /api/v1/accounts**: Retrieves a list of all bank accounts.\n    \n2. **POST /api/v1/accounts**: Creates a new bank account with the specified details.\n    \n3. **GET /api/v1/accounts/:id**: Retrieves the details of a specific bank account by its ID.\n    \n4. **DELETE /api/v1/accounts/:id**: Deletes a bank account by its ID.\n    \n5. **PATCH /api/v1/accounts/:id**: Updates details of a specific bank account by its ID.\n    \n6. **PATCH /api/v1/accounts/:id/withdraw**: Withdraws a specified amount from a bank account.\n    \n7. **PATCH /api/v1/accounts/:id/deposit**: Deposits a specified amount into a bank account.\n    \n\nEach endpoint is secured with JWT authentication and applies validation middleware where needed to ensure correct data handling."
+    },
+    {
+      "name": "Transactions",
+      "description": "This folder contains endpoints for managing financial transactions associated with bank accounts. The endpoints allow users to view and create transactions, ensuring that all operations are authenticated and validated.\n\n1. **GET /api/v1/transactions**: Retrieves a list of all transactions.\n    \n2. **POST /api/v1/transactions**: Creates a new transaction with the specified details. This endpoint requires validation of transaction data.\n    \n3. **GET /api/v1/transactions/:id**: Retrieves the details of a specific transaction by its ID.\n    \n\nAll endpoints in this folder are secured with JWT authentication to protect sensitive financial information. The appropriate validation middleware is applied to ensure that only valid transaction data is processed."
+    },
+    {
+      "name": "Users",
+      "description": "This folder contains endpoints for managing user-related operations within the application. The endpoints provide functionalities to retrieve user information and render user profiles. All operations are secured and require JWT authentication.\n\n1. **GET /api/v1/users**: Retrieves a list of all users in the system.\n    \n2. **GET /api/v1/users/:id**: Retrieves the details of a specific user by their ID.\n    \n3. **GET /api/v1/users/:id/views**: Renders the profile view of a specific user identified by their ID.\n    \n\nThe use of JWT authentication ensures that only authorized users can access these endpoints, thereby protecting sensitive user information."
+    },
+    {
+      "name": "Index",
+      "description": "The `index` folder serves as the entry point for the API documentation and the main application view. It includes the following endpoints:\n\n1. **GET /api-docs**: This endpoint provides access to the API documentation, allowing users to view the available API routes, their descriptions, request parameters, and responses. It is essential for developers and users who want to understand and interact with the API effectively.\n    \n2. **GET /**: This endpoint serves as the main entry point of the application. It can be used to render the home view or landing page of the application, providing users with an overview or access to the application's main features.\n    \n\nThese endpoints facilitate user interaction with the application and provide essential information about the API's functionality."
+    }
+  ]
+}
