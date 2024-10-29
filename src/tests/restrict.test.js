@@ -36,7 +36,7 @@ describe('Restrict Middleware', () => {
         const mockUser = { userId: 1, userEmail: 'test@example.com' };
         const token = jwt.sign(mockUser, process.env.JWT_SECRET); 
 
-        req.headers.authorization = token;
+        req.headers.authorization = `Bearer ${token}`;
 
         jwt.verify.mockImplementation((token, secret, callback) => {
             callback(null, mockUser); 
@@ -54,13 +54,26 @@ describe('Restrict Middleware', () => {
         expect(res.statusCode).toBe(401);
         expect(res._getData()).toEqual({
             status: false,
-            message: 'you\'re not authorized',
+            message: "you're not authorized",
+            data: null
+        });
+    });
+
+    test('should return 401 if authorization header does not start with "Bearer "', () => {
+        req.headers.authorization = 'invalid_token';
+
+        restrict(req, res, next);
+
+        expect(res.statusCode).toBe(401);
+        expect(res._getData()).toEqual({
+            status: false,
+            message: "you're not authorized",
             data: null
         });
     });
 
     test('should return 401 if token is invalid', () => {
-        req.headers.authorization = 'invalid_token';
+        req.headers.authorization = 'Bearer invalid_token';
 
         jwt.verify.mockImplementation((token, secret, callback) => {
             callback(new Error('Invalid token'), null);
@@ -71,8 +84,8 @@ describe('Restrict Middleware', () => {
         expect(res.statusCode).toBe(401);
         expect(res._getData()).toEqual({
             status: false,
-            message: 'you\'re not authorized',
-            err: expect.any(String), 
+            message: "you're not authorized",
+            err: 'Invalid token', 
             data: null
         });
     });
