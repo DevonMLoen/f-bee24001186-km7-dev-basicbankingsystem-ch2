@@ -28,11 +28,12 @@ class Auth {
   }
 
   async logout() {
-    try {
+    // try {
+    // implementasi code logout
       return { message: 'Logout successful' };
-    } catch (error) {
-      throw new Error(`Logout failed: ${error.message}`);
-    }
+    // } catch (error) {
+    //   throw new Error(`Logout failed: ${error.message}`);
+    // }
   }
 
   async resetPassword(userId, newPassword) {
