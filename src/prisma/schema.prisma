@@ -21,6 +21,7 @@ model User {
   userPassword String   @map("user_password")
   profile       Profile[]
   bankAccount   BankAccount[] 
+  images       Image[]   
 }
 
 model Profile {
@@ -55,4 +56,16 @@ model Transaction {
 
   bankAccountSource     BankAccount @relation("source", fields: [sourceAccountId], references: [bankAccountId], onDelete: Cascade)
   bankAccountDestination BankAccount @relation("destination", fields: [destinationAccountId], references: [bankAccountId], onDelete: Cascade)
+}
+
+model Image {
+  @@map("image")
+  id        Int      @id @default(autoincrement())
+  title     String
+  description String
+  url       String
+  fileId    String   @map("file_id")
+  createdAt DateTime @default(now())  @map("created_at")
+  userId    Int      @map("user_id")
+  user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
