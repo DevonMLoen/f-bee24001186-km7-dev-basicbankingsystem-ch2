@@ -16,6 +16,7 @@ const userRoutes = require("./routes/users.js");
 const bankAccountRoutes = require("./routes/bank_accounts.js");
 const transactionRoutes = require("./routes/transactions.js");
 const authRoutes = require("./routes/auth.js");
+const mediaRoutes = require("./routes/media.js");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -28,6 +29,8 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'views')));
+
+app.use("/images",express.static("public/images"));
 
 app.get('/', async (req, res) => {
     try {
@@ -43,6 +46,7 @@ app.use("/api/v1/users",userRoutes);
 app.use("/api/v1/accounts",bankAccountRoutes);
 app.use("/api/v1/transactions",transactionRoutes);
 app.use("/api/v1/auths",authRoutes);
+app.use("/api/v1/media",mediaRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
