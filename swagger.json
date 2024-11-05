@@ -2362,6 +2362,631 @@
         }
       }
     },
+    "/api/v1/media/imagekit": {
+      "get": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "GetAllImages",
+        "description": "GetAllImages",
+        "operationId": "getallimages",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2024-11-05T19:45:35.686Z"
+                          },
+                          "description": {
+                            "type": "string",
+                            "example": ""
+                          },
+                          "fileId": {
+                            "type": "string",
+                            "example": "672a75dee375273f6072e11c"
+                          },
+                          "id": {
+                            "type": "number",
+                            "example": 1
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "liverpool.jpg"
+                          },
+                          "url": {
+                            "type": "string",
+                            "example": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "userEmail": {
+                                "type": "string",
+                                "example": "john.doe@example.com"
+                              },
+                              "userId": {
+                                "type": "number",
+                                "example": 1
+                              },
+                              "userName": {
+                                "type": "string",
+                                "example": "John Doe"
+                              },
+                              "userPassword": {
+                                "type": "string",
+                                "example": "$2b$10$6XonIGvTm3CpPXHgCe3T6u2qxfGoeUkCA/KQVXBycgsywv8TapTXu"
+                              }
+                            }
+                          },
+                          "userId": {
+                            "type": "number",
+                            "example": 1
+                          }
+                        }
+                      },
+                      "example": [
+                        {
+                          "createdAt": "2024-11-05T19:45:35.686Z",
+                          "description": "",
+                          "fileId": "672a75dee375273f6072e11c",
+                          "id": 1,
+                          "title": "liverpool.jpg",
+                          "url": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg",
+                          "user": {
+                            "userEmail": "john.doe@example.com",
+                            "userId": 1,
+                            "userName": "John Doe",
+                            "userPassword": "$2b$10$6XonIGvTm3CpPXHgCe3T6u2qxfGoeUkCA/KQVXBycgsywv8TapTXu"
+                          },
+                          "userId": 1
+                        }
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "data": [
+                        {
+                          "createdAt": "2024-11-05T19:45:35.686Z",
+                          "description": "",
+                          "fileId": "672a75dee375273f6072e11c",
+                          "id": 1,
+                          "title": "liverpool.jpg",
+                          "url": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg",
+                          "user": {
+                            "userEmail": "john.doe@example.com",
+                            "userId": 1,
+                            "userName": "John Doe",
+                            "userPassword": "$2b$10$6XonIGvTm3CpPXHgCe3T6u2qxfGoeUkCA/KQVXBycgsywv8TapTXu"
+                          },
+                          "userId": 1
+                        }
+                      ],
+                      "message": "success",
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "AddImages",
+        "description": "AddImages",
+        "operationId": "addimages",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "liverpool_5CxGFhQcO.jpg"
+                        },
+                        "url": {
+                          "type": "string",
+                          "example": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg"
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "liverpool_5CxGFhQcO.jpg",
+                        "url": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg"
+                      },
+                      "message": "success",
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/media/imagekit/1": {
+      "get": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "GetImageById",
+        "description": "GetImageById",
+        "operationId": "getimagebyid",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2024-11-05T19:45:35.686Z"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": ""
+                        },
+                        "fileId": {
+                          "type": "string",
+                          "example": "672a75dee375273f6072e11c"
+                        },
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "liverpool.jpg"
+                        },
+                        "url": {
+                          "type": "string",
+                          "example": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg"
+                        },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "userEmail": {
+                              "type": "string",
+                              "example": "john.doe@example.com"
+                            },
+                            "userId": {
+                              "type": "number",
+                              "example": 1
+                            },
+                            "userName": {
+                              "type": "string",
+                              "example": "John Doe"
+                            },
+                            "userPassword": {
+                              "type": "string",
+                              "example": "$2b$10$6XonIGvTm3CpPXHgCe3T6u2qxfGoeUkCA/KQVXBycgsywv8TapTXu"
+                            }
+                          }
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "data": {
+                        "createdAt": "2024-11-05T19:45:35.686Z",
+                        "description": "",
+                        "fileId": "672a75dee375273f6072e11c",
+                        "id": 1,
+                        "title": "liverpool.jpg",
+                        "url": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg",
+                        "user": {
+                          "userEmail": "john.doe@example.com",
+                          "userId": 1,
+                          "userName": "John Doe",
+                          "userPassword": "$2b$10$6XonIGvTm3CpPXHgCe3T6u2qxfGoeUkCA/KQVXBycgsywv8TapTXu"
+                        },
+                        "userId": 1
+                      },
+                      "message": "success",
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "DeleteImageById",
+        "description": "DeleteImageById",
+        "operationId": "deleteimagebyid",
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Image deleted successfully"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "message": "Image deleted successfully",
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "UpdateImageById",
+        "description": "UpdateImageById",
+        "operationId": "updateimagebyid",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "example": "This is the logo of liverpool"
+                  },
+                  "title": {
+                    "type": "string",
+                    "example": "Liverpool Logo.png"
+                  }
+                }
+              },
+              "examples": {
+                "UpdateImageById": {
+                  "value": {
+                    "description": "This is the logo of liverpool",
+                    "title": "Liverpool Logo.png"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "200 OK - Successful Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "createdAt": {
+                          "type": "string",
+                          "example": "2024-11-05T19:45:35.686Z"
+                        },
+                        "description": {
+                          "type": "string",
+                          "example": "This is the logo of liverpool"
+                        },
+                        "fileId": {
+                          "type": "string",
+                          "example": "672a75dee375273f6072e11c"
+                        },
+                        "id": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "title": {
+                          "type": "string",
+                          "example": "Liverpool Logo.png"
+                        },
+                        "url": {
+                          "type": "string",
+                          "example": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg"
+                        },
+                        "userId": {
+                          "type": "number",
+                          "example": 1
+                        }
+                      }
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Image updated successfully"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                },
+                "examples": {
+                  "200 OK - Successful Request": {
+                    "value": {
+                      "data": {
+                        "createdAt": "2024-11-05T19:45:35.686Z",
+                        "description": "This is the logo of liverpool",
+                        "fileId": "672a75dee375273f6072e11c",
+                        "id": 1,
+                        "title": "Liverpool Logo.png",
+                        "url": "https://ik.imagekit.io/9kbraeia1/liverpool_5CxGFhQcO.jpg",
+                        "userId": 1
+                      },
+                      "message": "Image updated successfully",
+                      "status": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "401 Unauthorized - Authentication Required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "nullable": true,
+                      "example": null
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "you're not authorized"
+                    },
+                    "status": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                },
+                "examples": {
+                  "401 Unauthorized - Authentication Required": {
+                    "value": {
+                      "data": null,
+                      "message": "you're not authorized",
+                      "status": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api-docs": {
       "get": {
         "tags": [
@@ -2410,7 +3035,7 @@
         }
       }
     }
-  },  
+  },
   "components": {
     "schemas": {
       "User": {
@@ -2515,6 +3140,42 @@
             "example": 200.00
           }
         }
+      },
+      "Image": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "Sample Image"
+          },
+          "description": {
+            "type": "string",
+            "example": "This is a sample image description."
+          },
+          "url": {
+            "type": "string",
+            "example": "https://example.com/sample-image.jpg"
+          },
+          "fileId": {
+            "type": "string",
+            "example": "file_id_12345"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00Z"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          }
+        }
       }
     },
     "securitySchemes": {
@@ -2545,6 +3206,10 @@
     {
       "name": "Users",
       "description": "This folder contains endpoints for managing user-related operations within the application. The endpoints provide functionalities to retrieve user information and render user profiles. All operations are secured and require JWT authentication.\n\n1. **GET /api/v1/users**: Retrieves a list of all users in the system.\n    \n2. **GET /api/v1/users/:id**: Retrieves the details of a specific user by their ID.\n    \n3. **GET /api/v1/users/:id/views**: Renders the profile view of a specific user identified by their ID.\n    \n\nThe use of JWT authentication ensures that only authorized users can access these endpoints, thereby protecting sensitive user information."
+    },
+    {
+      "name": "Media",
+      "description": "The folder is responsible for managing and storing images in the application by utilizing ImageKit as a cloud computing solution. This folder contains controllers for handling CRUD (Create, Read, Update, Delete) operations on images, middleware for managing uploads using `multer`, and routes to direct HTTP requests. With the integration of ImageKit, the application can efficiently upload, retrieve, update, and delete images while benefiting from automatic image optimization and fast delivery via CDN, thereby enhancing the overall user experience."
     },
     {
       "name": "Index",
