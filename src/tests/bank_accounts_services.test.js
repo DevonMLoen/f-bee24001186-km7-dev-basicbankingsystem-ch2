@@ -1,4 +1,4 @@
-const BankAccount = require('../services/bank_Accounts');
+const BankAccount = require('../services/bank_accounts');
 const prisma = require('../db');
 
 jest.mock('../db', () => {
