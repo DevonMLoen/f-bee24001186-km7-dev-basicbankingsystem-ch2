@@ -1,5 +1,7 @@
 # Abaikan file testing.js
 testing.js
+
+#COVERAGE FOLDER
 coverage/
 # Node modules
 node_modules/

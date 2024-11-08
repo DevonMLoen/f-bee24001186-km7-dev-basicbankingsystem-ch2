@@ -1,7 +1,7 @@
 const BankAccountController = require('../controllers/bank_accounts');
 const BankAccount = require('../services/bank_accounts');
 
-jest.mock('../services/bank_Accounts');
+jest.mock('../services/bank_accounts');
 
 describe('BankAccountController', () => {
   let bankAccountController;
