@@ -39,7 +39,7 @@ jobs:
             npx prisma generate
 
             # Restart atau mulai aplikasi dengan PM2
-            pm2 restart my-app || pm2 start app.js --name "my-app"
+            pm2 restart "My Bank Accounts" || pm2 start index.js --name "My Bank Accounts"
 
             # Simpan daftar dan konfigurasi proses PM2
             pm2 save
