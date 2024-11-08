@@ -1,6 +1,6 @@
 # Abaikan file testing.js
 testing.js
-
+coverage/
 # Node modules
 node_modules/
 
