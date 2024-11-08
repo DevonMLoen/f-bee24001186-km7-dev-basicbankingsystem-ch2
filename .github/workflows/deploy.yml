@@ -3,41 +3,44 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Atau branch yang Anda inginkan
+      - main  # Branch yang akan memicu deploy
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
+      # Langkah 1: Checkout kode
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      # Langkah 2: Set up SSH
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
         with:
-          node-version: '16'
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
-      - name: Install dependencies
-        run: npm install 
-
-      - name: Generate Prisma Client
-        run: npx prisma generate --schema=src/prisma/schema.prisma
-
-      - name: Run tests
-        run: npm test
-
-      - name: Deploy to EC2 via SSH
-        env:
-          EC2_HOST: ${{ secrets.EC2_HOST }}
-          EC2_USER: ${{ secrets.EC2_USER }}
+      # Langkah 3: Deploy ke EC2, install dependencies, dan restart aplikasi
+      - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} $EC2_USER@$EC2_HOST << 'EOF'
-            cd project/f-bee24001186-km7-dev-basicbankingsystem-ch2
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            # Pindah ke direktori proyek
+            cd project/f-bee24001186-km7-dev-basicbankingsystem-ch2/src
+
+            # Pull perubahan terbaru dari branch main
             git pull origin main
+
+            # Load NVM dan pastikan Node.js tersedia
+            source ~/.nvm/nvm.sh || echo "NVM tidak ditemukan, melewati"
+
+            # Install dependencies proyek
             npm install
-            npm run build
-            pm2 restart all || pm2 start app.js --name "my-app"
-            pm2 startup systemd
+
+            # Generate Prisma client
+            npx prisma generate
+
+            # Restart atau mulai aplikasi dengan PM2
+            pm2 restart my-app || pm2 start app.js --name "my-app"
+
+            # Simpan daftar dan konfigurasi proses PM2
             pm2 save
           EOF
