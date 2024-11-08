@@ -29,9 +29,6 @@ jobs:
             # Pull perubahan terbaru dari branch main
             git pull origin main
 
-            # Load NVM dan pastikan Node.js tersedia
-            source ~/.nvm/nvm.sh || echo "NVM tidak ditemukan, melewati"
-
             # Install dependencies proyek
             npm install
 
