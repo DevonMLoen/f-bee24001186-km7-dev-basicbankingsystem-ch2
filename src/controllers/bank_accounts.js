@@ -1,4 +1,4 @@
-const BankAccount = require('../services/bank_Accounts');
+const BankAccount = require('../services/bank_accounts');
 
 class BankAccountController {
   async getAllBankAccounts(req, res) {
