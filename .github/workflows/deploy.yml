@@ -24,7 +24,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
             # Pindah ke direktori proyek
-            cd project/f-bee24001186-km7-dev-basicbankingsystem-ch2/src
+            cd ~/project/f-bee24001186-km7-dev-basicbankingsystem-ch2/src
 
             # Pull perubahan terbaru dari branch main
             git pull origin main
@@ -38,9 +38,13 @@ jobs:
             # Generate Prisma client
             npx prisma generate
 
-            # Restart atau mulai aplikasi dengan PM2
+            # Restart aplikasi dengan PM2 atau mulai jika belum berjalan
             pm2 restart "My Bank Accounts" || pm2 start index.js --name "My Bank Accounts"
 
             # Simpan daftar dan konfigurasi proses PM2
+            pm2 save
+
+            # Menambahkan PM2 ke startup agar otomatis berjalan saat server reboot
+            pm2 startup systemd --hp /home/ubuntu
             pm2 save
           EOF
