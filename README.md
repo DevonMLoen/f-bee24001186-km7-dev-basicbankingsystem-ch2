@@ -5,6 +5,10 @@ This is a simple console-based banking application built using JavaScript and No
 ## Flowchart
 ![Flowchart](Flowchart.png)
 
+## CODECOV
+[![codecov](https://codecov.io/gh/DevonMLoen/f-bee24001186-km7-dev-basicbankingsystem-ch2/graph/badge.svg?token=4F9J9PMMTV)](https://codecov.io/gh/DevonMLoen/f-bee24001186-km7-dev-basicbankingsystem-ch2)
+
+
 ## Features
 
 - **Account Types**:
