@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require("../db"); 
 const { JWT_SECRET } = process.env;
-const restrict = require('../middleware/restrict');
 
 class Auth {
   async login(email, password) {

@@ -28,4 +28,13 @@ jobs:
         run: npx prisma generate --schema=src/prisma/schema.prisma
 
       - name: Run tests
-        run: npm test
+        run: npm test -- --coverage
+      
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true

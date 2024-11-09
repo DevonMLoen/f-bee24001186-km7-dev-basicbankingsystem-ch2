@@ -218,7 +218,7 @@ const validateBankPatchAccount = (req, res, next) => {
 };
 
 const validateTransaction = (req, res, next) => {
-  const { error, value } = transactionSchema.validate(req.body);
+  const { error} = transactionSchema.validate(req.body);
 
   if (error) {
     return res.status(400).json({ message: error.details[0].message });

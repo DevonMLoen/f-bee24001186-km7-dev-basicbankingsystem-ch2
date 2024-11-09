@@ -10,6 +10,10 @@
     {
       "url": "http://localhost:2000",
       "description": "Local development server"
+    },
+    {
+      "url": "http://ec2-52-64-126-153.ap-southeast-2.compute.amazonaws.com",
+      "description": "AWS Server"
     }
   ],
   "paths": {

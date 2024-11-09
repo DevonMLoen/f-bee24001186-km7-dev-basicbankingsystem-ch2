@@ -1,25 +1,27 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
 
-/** @type {import('eslint').Linter.Config[]} */
 export default [
+  pluginJs.configs.recommended,  
+
   {
     files: ["**/*.js"],
     languageOptions: {
-      sourceType: "commonjs",
+      sourceType: "commonjs",  
       globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.jest,
+        ...globals.node,  
+        ...globals.jest,  
+        ...globals.browser,  
       },
     },
     rules: {
-      "no-unused-vars": "off",  // Mematikan aturan no-unused-vars
+      "no-unused-vars": "off",  
+      "no-undef": "off",       
     },
     ignores: [
       "node_modules/**",
       "dist/**",
+      "src/controllers/**",
     ],
   },
-  pluginJs.configs.recommended,
 ];

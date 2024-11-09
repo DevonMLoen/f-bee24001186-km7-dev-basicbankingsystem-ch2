@@ -1,6 +1,5 @@
 const Auth = require('../services/auth.js');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const prisma = require('../db/index.js');
 
 jest.mock('bcrypt', () => ({
