@@ -5,12 +5,19 @@ const path = require('path');
 const prisma = require('./db')
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocs = require("../swagger.json");
+require("../instrument");
+const Sentry = require("@sentry/node");
 
 const app = express();
 
 dotenv.config();
 
 const PORT = process.env.PORT;
+
+// app.use(Sentry.Handlers.requestHandler());
+// app.use(Sentry.Handlers.tracingHandler());
+Sentry.setupExpressErrorHandler(app);
+
 
 const userRoutes = require("./routes/users.js");
 const bankAccountRoutes = require("./routes/bank_accounts.js");
@@ -42,11 +49,22 @@ app.get('/', async (req, res) => {
     }
 });
 
+app.get("/errortesting", function(req, res) {
+    // Lemparkan error untuk pengujian Sentry
+    throw new Error("This is a test error!");
+  });
+
 app.use("/api/v1/users",userRoutes);
 app.use("/api/v1/accounts",bankAccountRoutes);
 app.use("/api/v1/transactions",transactionRoutes);
 app.use("/api/v1/auths",authRoutes);
 app.use("/api/v1/media",mediaRoutes);
+
+// app.use(Sentry.Handlers.errorHandler());
+app.use(function onError(err, req, res, next) {
+    res.statusCode = 500;
+    res.end(res.sentry + "\n");
+  });
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
