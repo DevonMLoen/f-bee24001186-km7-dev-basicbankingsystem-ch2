@@ -58,7 +58,6 @@ app.use(function onError(err, req, res , next) {
     res.statusCode = statusCode;
 
     if (statusCode >= 500 && statusCode < 600) { 
-        // Capture server errors and other critical issues
         Sentry.withScope((scope) => {
             scope.setTag("status_code", statusCode);
             Sentry.captureException(err);
@@ -68,7 +67,7 @@ app.use(function onError(err, req, res , next) {
 
     res.status(statusCode).json({
         status: err.status || false,
-        message: err.message || "Terjadi error pada server.",
+        message: err.message || "Internal Server Error",
         data: err.data || null,
         sentryId: res.sentry,
     });
