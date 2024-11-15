@@ -91,10 +91,10 @@ describe('Auth Module', () => {
             expect(response).toEqual({ message: 'Password reset email has been sent' });
         });
 
-        test('should throw an error if email is not found', async () => {
+        test('should throw an error if email is not Found', async () => {
             prisma.user.findUnique.mockResolvedValue(null);
 
-            await expect(auth.forgotPassword('nonexistent@example.com')).rejects.toThrow('Forgot password failed: Email not found');
+            await expect(auth.forgotPassword('nonexistent@example.com')).rejects.toThrow('Forgot password failed: Email not Found');
         });
     });
 });

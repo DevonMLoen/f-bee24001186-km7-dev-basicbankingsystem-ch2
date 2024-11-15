@@ -1,4 +1,5 @@
-const prisma = require("../db"); 
+const prisma = require("../db");
+const { HttpError } = require("../middleware/errorhandling");
 
 class BankAccount {
     static prisma = prisma
@@ -14,7 +15,7 @@ class BankAccount {
             where: { userId: parseInt(this.id) },
         });
         if (!user) {
-            throw new Error('User not found');
+            throw new HttpError("User not Found", 404);
         }
     }
 
@@ -33,7 +34,7 @@ class BankAccount {
             });
             return newAccount;
         } catch (error) {
-            throw new Error('Failed to create bank account : ' + error.message);
+            throw new HttpError('Failed to create bank account : ' + error.message, error.statusCode);
         }
     }
 
@@ -47,7 +48,7 @@ class BankAccount {
 
             return bankAccounts;
         } catch (error) {
-            throw new Error('Failed to get all bank accounts : ' + error.message);
+            throw new HttpError('Failed to get all bank accounts : ' + error.message, error.statusCode);
         }
     }
 
@@ -63,12 +64,12 @@ class BankAccount {
             });
 
             if (!bankAccount) {
-                throw new Error('Bank account not found');
+                throw new HttpError('Bank account not found', 404);
             }
 
             return bankAccount;
         } catch (error) {
-            throw new Error('Failed to get Bank Account : ' + error.message);
+            throw new HttpError('Failed to get Bank Account : ' + error.message, error.statusCode);
         }
     }
 
@@ -81,7 +82,7 @@ class BankAccount {
             });
 
             if (!bankAccount) {
-                throw new Error('Bank account not found');
+                throw new HttpError('Bank Account not Found', 404);
             }
 
             await BankAccount.prisma.bankAccount.delete({
@@ -92,7 +93,7 @@ class BankAccount {
 
             return { message: 'Bank account successfully deleted' };
         } catch (error) {
-            throw new Error('Failed to delete bank account : ' + error.message);
+            throw new HttpError('Failed to delete Bank account : ' + error.message, error.statusCode);
         }
     }
 
@@ -105,7 +106,7 @@ class BankAccount {
             });
 
             if (!bankAccount) {
-                throw new Error('Bank account not found');
+                throw new HttpError('Bank Account not Found', 404);
             }
 
             const updatedAccount = await BankAccount.prisma.bankAccount.update({
@@ -113,15 +114,15 @@ class BankAccount {
                     bankAccountId: parseInt(bankAccountId),
                 },
                 data: {
-                    bankName: updatedData.bankName, 
-                    bankAccountNumber: updatedData.bankAccountNumber, 
-                    balance: updatedData.balance, 
+                    bankName: updatedData.bankName,
+                    bankAccountNumber: updatedData.bankAccountNumber,
+                    balance: updatedData.balance,
                 },
             });
 
             return updatedAccount;
         } catch (error) {
-            throw new Error('Failed to update bank account : ' + error.message);
+            throw new HttpError('Failed to update bank account : ' + error.message, error.statusCode);
         }
     }
 
@@ -134,15 +135,15 @@ class BankAccount {
             });
 
             if (!bankAccount) {
-                throw new Error('Bank account not found');
+                throw new HttpError('Bank Account not Found', 404);
             }
 
             if (amount <= 0) {
-                throw new Error('Amount must be greater than zero');
+                throw new HttpError('Amount must be greater than zero', 403);
             }
 
             if (bankAccount.balance < amount) {
-                throw new Error('Insufficient balance');
+                throw new HttpError('Insufficient balance', 403);
             }
 
             const updatedAccount = await BankAccount.prisma.bankAccount.update({
@@ -154,9 +155,9 @@ class BankAccount {
                 },
             });
 
-            return updatedAccount; 
+            return updatedAccount;
         } catch (error) {
-            throw new Error('Failed to withdraw from bank account : ' + error.message);
+            throw new HttpError('Failed to withdraw from bank account : ' + error.message, error.statusCode);
         }
     }
 
@@ -169,11 +170,11 @@ class BankAccount {
             });
 
             if (!bankAccount) {
-                throw new Error('Bank account not found');
+                throw new HttpError('Bank Account not Found', 404);
             }
 
             if (amount <= 0) {
-                throw new Error('Amount must be greater than zero');
+                throw new HttpError('Amount must be greater than zero', 404);
             }
 
             const updatedAccount = await BankAccount.prisma.bankAccount.update({
@@ -185,9 +186,9 @@ class BankAccount {
                 },
             });
 
-            return updatedAccount; 
+            return updatedAccount;
         } catch (error) {
-            throw new Error('Failed to deposit from bank account : ' + error.message);
+            throw new HttpError('Failed to deposit from bank account : ' + error.message, error.statusCode);
         }
     }
 }

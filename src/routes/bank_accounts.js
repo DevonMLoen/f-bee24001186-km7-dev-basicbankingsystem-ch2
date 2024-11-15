@@ -7,12 +7,12 @@ const restrict = require('../middleware/restrict');
 
 router.use(restrict); // add jwt authenticate
 
-router.get("/", (req, res) => BankAccountController.getAllBankAccounts(req, res));
-router.post('/', validateBankAccount, (req, res) => BankAccountController.createAccount(req, res));
-router.get("/:id", (req, res) => BankAccountController.getBankAccountById(req, res));
-router.delete('/:id', (req, res) => BankAccountController.deleteAccountById(req, res));
-router.patch('/:id', validateBankPatchAccount, (req, res) => BankAccountController.updateAccount(req, res));
-router.patch('/:id/withdraw', (req, res) => BankAccountController.withdraw(req, res));
-router.patch('/:id/deposit', (req, res) => BankAccountController.deposit(req, res));
+router.get("/", (req, res, next) => BankAccountController.getAllBankAccounts(req, res, next));
+router.post('/', validateBankAccount, (req, res, next) => BankAccountController.createAccount(req, res, next));
+router.get("/:id", (req, res, next) => BankAccountController.getBankAccountById(req, res, next));
+router.delete('/:id', (req, res, next) => BankAccountController.deleteAccountById(req, res, next));
+router.patch('/:id', validateBankPatchAccount, (req, res, next) => BankAccountController.updateAccount(req, res, next));
+router.patch('/:id/withdraw', (req, res, next) => BankAccountController.withdraw(req, res, next));
+router.patch('/:id/deposit', (req, res, next) => BankAccountController.deposit(req, res, next));
 
 module.exports = router;

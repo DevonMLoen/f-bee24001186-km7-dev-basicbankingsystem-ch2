@@ -46,6 +46,16 @@ describe("ImageController", () => {
                 }
             });
         });
+
+        it("should handle missing file in request", async () => {
+            req.file = undefined; // Simulate missing file
+            await ImageController.storageImage(req, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({
+                status: false,
+                message: 'File is required'
+            });
+        });
     });
 
     describe("imagekitUpload", () => {
@@ -84,6 +94,16 @@ describe("ImageController", () => {
             expect(res.json).toHaveBeenCalledWith({
                 status: false,
                 message: 'Internal server error'
+            });
+        });
+
+        it("should handle missing file in request", async () => {
+            req.file = undefined; // Simulate missing file
+            await ImageController.imagekitUpload(req, res);
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({
+                status: false,
+                message: 'File is required'
             });
         });
     });
@@ -141,8 +161,9 @@ describe("ImageController", () => {
             });
         });
 
-        it("should handle errors and return 500", async () => {
-            Image.getImageById.mockRejectedValue(new Error("Fetch error"));
+        it("should handle invalid image ID and return 500", async () => {
+            req.params.id = 'invalid'; // Simulate invalid ID
+            Image.getImageById.mockRejectedValue(new Error("Invalid ID"));
 
             await ImageController.getImageById(req, res);
 
@@ -153,6 +174,7 @@ describe("ImageController", () => {
             });
         });
     });
+
     describe("deleteImage", () => {
         it("should delete an image by ID", async () => {
             Image.deleteImage.mockResolvedValue();
@@ -192,7 +214,6 @@ describe("ImageController", () => {
             });
         });
     });
-
 
     describe("updateImage", () => {
         it("should update an image by ID", async () => {

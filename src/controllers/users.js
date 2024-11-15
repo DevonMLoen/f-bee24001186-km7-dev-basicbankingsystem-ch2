@@ -1,46 +1,37 @@
 const User = require('../services/users');
 
 class UserController {
-  async getAllUsers(req, res) {
+  async getAllUsers(req, res , next) {
     try {
       const users = await User.getAllUsers();
 
-      if (!users || users.length === 0) {
-        return res.status(404).json({ message: 'No users were found.' });
-      }
       res.status(200).json(users);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 
-  async getUserById(req, res) {
+  async getUserById(req, res , next) {
     try {
       const userId = req.params.id;
 
       const user = await User.getUserById(userId);
-      if (!user || user.length === 0) {
-        return res.status(404).json({ message: 'No users were found.' });
-      }
 
       res.status(200).json({ user });
     } catch (error) {
-      res.status(500).json({ message: 'An error occurred on the server.' });
+      next(error);
     }
   }
 
-  async renderUser(req, res) {
+  async renderUser(req, res , next) {
     try {
       const userId = req.params.id;
 
       const user = await User.getUserById(userId);
-      if (!user || user.length === 0) {
-        return res.status(404).json({ message: 'No users were found.' });
-      }
 
       res.render('users', { user }); // renders
     } catch (error) {
-      res.status(500).json({ message: 'An error occurred on the server.' });
+      next(error);
     }
   }
 }

@@ -3,6 +3,7 @@ require('dotenv').config();
 const Image = require('../services/media');
 const imagekit = require('../middleware/imagekit');
 const prisma = require('../db');
+const { HttpError } = require('../middleware/errorhandling');
 
 jest.mock('../middleware/imagekit', () => ({
     upload: jest.fn(),
@@ -48,6 +49,12 @@ describe('Image Service', () => {
             imagekit.upload.mockRejectedValue(new Error('Upload failed'));
 
             await expect(Image.uploadToImageKit(mockFile)).rejects.toThrow('Upload failed');
+        });
+
+        it('should throw HttpError on failure', async () => {
+            imagekit.upload.mockRejectedValue(new Error('Upload failed'));
+
+            await expect(Image.uploadToImageKit(mockFile)).rejects.toThrow(HttpError);
         });
     });
 
@@ -96,6 +103,13 @@ describe('Image Service', () => {
             });
             expect(result).toEqual(newImage);
         });
+
+        it('should throw HttpError on database failure', async () => {
+            const uploadResponse = { url: 'http://imagekit.io/testImage.jpg', fileId: 'fileId' };
+            prisma.image.create.mockRejectedValue(new Error('Database error'));
+
+            await expect(Image.createImageRecord(mockFile, uploadResponse.url, uploadResponse.fileId, userId, description)).rejects.toThrow(HttpError);
+        });
     });
 
     describe('getAllImages', () => {
@@ -108,6 +122,18 @@ describe('Image Service', () => {
                 include: { user: true },
             });
             expect(result).toEqual(images);
+        });
+
+        it('should throw HttpError if no images found', async () => {
+            prisma.image.findMany.mockResolvedValue(null);
+
+            await expect(Image.getAllImages()).rejects.toThrow(HttpError);
+        });
+
+        it('should throw HttpError on database failure', async () => {
+            prisma.image.findMany.mockRejectedValue(new Error('Database error'));
+
+            await expect(Image.getAllImages()).rejects.toThrow(HttpError);
         });
     });
 
@@ -131,10 +157,16 @@ describe('Image Service', () => {
             expect(result).toBeNull();
         });
 
-        it('should handle error if findUnique fails', async () => {
+        it('should throw HttpError if image not found', async () => {
+            prisma.image.findUnique.mockResolvedValue(null);
+
+            await expect(Image.getImageById(1)).rejects.toThrow(HttpError);
+        });
+
+        it('should throw HttpError on database failure', async () => {
             prisma.image.findUnique.mockRejectedValue(new Error('Database error'));
 
-            await expect(Image.getImageById(1)).rejects.toThrow('Database error');
+            await expect(Image.getImageById(1)).rejects.toThrow(HttpError);
         });
     });
 
@@ -162,18 +194,18 @@ describe('Image Service', () => {
             await expect(Image.deleteImage(1)).rejects.toThrow('Delete failed');
         });
 
-        it('should throw an error if the image is not found', async () => {
+        it('should throw HttpError if the image is not found', async () => {
             prisma.image.findUnique.mockResolvedValue(null);
 
-            await expect(Image.deleteImage(1)).rejects.toThrow("Image not found");
+            await expect(Image.deleteImage(1)).rejects.toThrow(HttpError);
         });
 
-        it('should throw an error if delete fails', async () => {
+        it('should throw HttpError if delete fails', async () => {
             const image = { id: 1, fileId: 'fileId' };
             prisma.image.findUnique.mockResolvedValue(image);
             imagekit.deleteFile.mockRejectedValue(new Error('Delete error'));
 
-            await expect(Image.deleteImage(1)).rejects.toThrow('Delete error');
+            await expect(Image.deleteImage(1)).rejects.toThrow(HttpError);
         });
     });
 
@@ -193,7 +225,13 @@ describe('Image Service', () => {
         it('should handle update failure', async () => {
             prisma.image.update.mockRejectedValue(new Error("Update error"));
 
-            await expect(Image.updateImage(1, 'Updated Title', 'Updated Description')).rejects.toThrow("Update error");
+            await expect(Image.updateImage(1, 'Updated Title', 'Updated Description')).rejects.toThrow(HttpError);
+        });
+
+        it('should throw HttpError if image not found on update', async () => {
+            prisma.image.update.mockResolvedValue(null);
+
+            await expect(Image.updateImage(1, 'Updated Title', 'Updated Description')).rejects.toThrow(HttpError);
         });
     });
 });

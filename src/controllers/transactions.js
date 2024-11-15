@@ -1,20 +1,17 @@
 const Transaction = require('../services/transactions');
 
 class TransactionController {
-  async getAllTransactions(req, res) {
+  async getAllTransactions(req, res, next) {
     try {
       const transactions = await Transaction.getAllTransactions();
 
-      if (!transactions || transactions.length === 0) {
-        return res.status(404).json({ message: 'No transactions were found.' });
-      }
       res.status(200).json(transactions);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 
-  async createTransaction(req, res) {
+  async createTransaction(req, res, next) {
     const { sourceAccountId, destinationAccountId, amount } = req.body;
 
     try {
@@ -28,22 +25,19 @@ class TransactionController {
       });
 
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      next(error)
     }
   }
 
-  async getTransactionById(req, res) {
+  async getTransactionById(req, res, next) {
     try {
       const transactionId = req.params.id;
 
       const transaction = await Transaction.getTransactionById(transactionId);
-      if (!transaction || transaction.length === 0) {
-        return res.status(404).json({ message: 'No transactions were found.' });
-      }
 
       res.status(200).json({ transaction });
     } catch (error) {
-      res.status(500).json({ message: 'An error occurred on the server.' });
+      next(error)
     }
   }
 }

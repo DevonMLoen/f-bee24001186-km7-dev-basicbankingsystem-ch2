@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require("../db"); 
+const { HttpError } = require('../middleware/errorhandling');
 const { JWT_SECRET } = process.env;
 
 class Auth {
@@ -11,18 +12,18 @@ class Auth {
       });
 
       if (!user) {
-        throw new Error('Incorrect email or password');
+        throw new HttpError("Invalid email or password", 401);
       }
 
       const isMatch = await bcrypt.compare(password, user.userPassword);
       if (!isMatch) {
-        throw new Error('Incorrect email or password');
+        throw new HttpError("Invalid email or password", 401);
       }
 
       const token = this.generateToken(user);
       return { token, userId: user.userId, userRole: user.userRole };
     } catch (error) {
-      throw new Error(`Login failed: ${error.message}`);
+      throw new HttpError(`Login failed: ${error.message}`, error.statusCode)
     }
   }
 
@@ -44,7 +45,7 @@ class Auth {
       });
       return { message: 'Password successfully reset' };
     } catch (error) {
-      throw new Error(`Reset password failed: ${error.message}`);
+      throw new HttpError(`Reset password failed: ${error.message}`, error.statusCode);
     }
   }
 
@@ -55,11 +56,11 @@ class Auth {
       });
 
       if (!user) {
-        throw new Error('Email not found');
+        throw new HttpError("Email not Found", 404);
       }
       return { message: 'Password reset email has been sent' }; // Implement email sending logic here
     } catch (error) {
-      throw new Error(`Forgot password failed: ${error.message}`);
+        throw new HttpError(`Forgot password failed: ${error.message}`, error.statusCode);
     }
   }
 

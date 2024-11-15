@@ -1,4 +1,4 @@
-const Transaction = require('../services/transactions'); 
+const Transaction = require('../services/transactions');
 const prisma = require('../db');
 
 jest.mock('../db', () => {
@@ -17,6 +17,7 @@ jest.mock('../db', () => {
 });
 
 describe('Transaction Service', () => {
+
     describe('createTransaction', () => {
         it('should create a transaction successfully', async () => {
             const transactionData = {
@@ -33,10 +34,11 @@ describe('Transaction Service', () => {
                 return callback({
                     bankAccount: {
                         findUnique: jest.fn()
-                            .mockResolvedValueOnce(mockSourceAccount) 
-                            .mockResolvedValueOnce(mockDestinationAccount), 
-                        update: jest.fn().mockResolvedValueOnce(mockSourceAccount) 
-                            .mockResolvedValueOnce(mockDestinationAccount), 
+                            .mockResolvedValueOnce(mockSourceAccount)
+                            .mockResolvedValueOnce(mockDestinationAccount),
+                        update: jest.fn()
+                            .mockResolvedValueOnce({ ...mockSourceAccount, balance: 100 })
+                            .mockResolvedValueOnce({ ...mockDestinationAccount, balance: 200 }),
                     },
                     transaction: {
                         create: jest.fn().mockResolvedValue(mockNewTransaction),
@@ -65,8 +67,8 @@ describe('Transaction Service', () => {
                 return callback({
                     bankAccount: {
                         findUnique: jest.fn()
-                            .mockResolvedValueOnce(mockSourceAccount) 
-                            .mockResolvedValueOnce(mockDestinationAccount), 
+                            .mockResolvedValueOnce(mockSourceAccount)
+                            .mockResolvedValueOnce(mockDestinationAccount),
                         update: jest.fn(),
                     },
                 });
@@ -87,7 +89,7 @@ describe('Transaction Service', () => {
             prisma.$transaction.mockImplementation(async (callback) => {
                 return callback({
                     bankAccount: {
-                        findUnique: jest.fn().mockResolvedValueOnce(null), 
+                        findUnique: jest.fn().mockResolvedValueOnce(null), // source account not found
                         update: jest.fn(),
                     },
                 });
@@ -111,8 +113,8 @@ describe('Transaction Service', () => {
                 return callback({
                     bankAccount: {
                         findUnique: jest.fn()
-                            .mockResolvedValueOnce(mockSourceAccount) 
-                            .mockResolvedValueOnce(null), 
+                            .mockResolvedValueOnce(mockSourceAccount)
+                            .mockResolvedValueOnce(null), // destination account not found
                         update: jest.fn(),
                     },
                 });
@@ -121,6 +123,20 @@ describe('Transaction Service', () => {
             const transaction = new Transaction(transactionData);
 
             await expect(transaction.createTransaction()).rejects.toThrow('Account with ID 2 not found');
+        });
+
+        it('should throw an error if an exception is thrown during the transaction', async () => {
+            const transactionData = {
+                sourceAccountId: 1,
+                destinationAccountId: 2,
+                amount: 100,
+            };
+
+            prisma.$transaction.mockRejectedValue(new Error('Transaction failed'));
+
+            const transaction = new Transaction(transactionData);
+
+            await expect(transaction.createTransaction()).rejects.toThrow('Failed to Create transactions : Transaction failed');
         });
     });
 
@@ -156,6 +172,12 @@ describe('Transaction Service', () => {
                     bankAccountDestination: true,
                 },
             });
+        });
+
+        it('should throw an error if no transactions are found', async () => {
+            prisma.transaction.findMany.mockResolvedValue([]);
+
+            await expect(Transaction.getAllTransactions()).rejects.toThrow('No transactions were found.');
         });
 
         it('should throw an error if an error occurs during retrieval', async () => {
@@ -195,7 +217,7 @@ describe('Transaction Service', () => {
         it('should return null if transaction is not found', async () => {
             prisma.transaction.findUnique.mockResolvedValue(null);
 
-            const transaction = await Transaction.getTransactionById(999); 
+            const transaction = await Transaction.getTransactionById(999); // non-existent transaction
 
             expect(transaction).toBeNull();
             expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
@@ -209,7 +231,7 @@ describe('Transaction Service', () => {
             });
         });
 
-        it('should throw an error if an error occurs during retrieval', async () => {
+        it('should throw an error if an exception is thrown during retrieval', async () => {
             prisma.transaction.findUnique.mockRejectedValue(new Error('Database error'));
 
             await expect(Transaction.getTransactionById(1)).rejects.toThrow('Failed to get Transaction : Database error');

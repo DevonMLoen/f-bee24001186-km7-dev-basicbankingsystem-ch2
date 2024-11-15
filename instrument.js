@@ -1,9 +1,10 @@
 // Import with `import * as Sentry from "@sentry/node"` if you are using ESM
 const Sentry = require("@sentry/node");
 const { nodeProfilingIntegration } = require("@sentry/profiling-node");
+const DSN_SENTRY = process.env.DSN_SENTRY
 
 Sentry.init({
-  dsn: "https://48c2db8b4d1b2a26abebc34364be200d@o4508282919714816.ingest.us.sentry.io/4508283031257088",
+  dsn: DSN_SENTRY,
   integrations: [
     nodeProfilingIntegration(),
   ],

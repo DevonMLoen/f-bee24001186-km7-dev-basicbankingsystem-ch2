@@ -1,19 +1,24 @@
 const Image = require("../services/media");
 
 class ImageController {
-    static async storageImage(req, res) {
-        const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+    static async storageImage(req, res, next) {
+        try {
+            const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
-        return res.status(200).json({
-            status: true,
-            message: 'success',
-            data: {
-                image_url: imageUrl
-            }
-        });
+            return res.status(200).json({
+                status: true,
+                message: 'success',
+                data: {
+                    image_url: imageUrl
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
+
     }
 
-    static async imagekitUpload(req, res) {
+    static async imagekitUpload(req, res, next) {
         try {
             const uploadFile = await Image.uploadToImageKit(req.file);
             const newImage = await Image.createImageRecord(req.file, uploadFile.url, uploadFile.fileId, req.user.id, req.body.description);
@@ -28,12 +33,12 @@ class ImageController {
                     type: uploadFile.type
                 }
             });
-        } catch (err) {
-            return res.status(500).json({ status: false, message: 'Internal server error' });
+        } catch (error) {
+            next(error);
         }
     }
 
-    static async getAllImages(req, res) {
+    static async getAllImages(req, res , next) {
         try {
             const images = await Image.getAllImages();
 
@@ -42,12 +47,12 @@ class ImageController {
                 message: 'success',
                 data: images,
             });
-        } catch (err) {
-            return res.status(500).json({ status: false, message: 'Internal server error' });
+        } catch (error) {
+            next(error);
         }
     }
 
-    static async getImageById(req, res) {
+    static async getImageById(req, res , next) {
         try {
             const image = await Image.getImageById(req.params.id);
 
@@ -60,27 +65,24 @@ class ImageController {
                 message: 'success',
                 data: image,
             });
-        } catch (err) {
-            return res.status(500).json({ status: false, message: 'Internal server error' });
+        } catch (error) {
+            next(error);
         }
     }
 
-    static async deleteImage(req, res) {
+    static async deleteImage(req, res , next) {
         try {
             await Image.deleteImage(req.params.id);
             return res.json({
                 status: true,
                 message: 'Image deleted successfully',
             });
-        } catch (err) {
-            if (err.code === 'P2025') {
-                return res.status(404).json({ status: false, message: 'Image not found' });
-            }
-            return res.status(500).json({ status: false, message: err.message || 'Internal server error' });
+        } catch (error) {
+            next(error);
         }
     }
 
-    static async updateImage(req, res) {
+    static async updateImage(req, res, next) {
         try {
             const updatedImage = await Image.updateImage(req.params.id, req.body.title, req.body.description);
 
@@ -89,11 +91,8 @@ class ImageController {
                 message: 'Image updated successfully',
                 data: updatedImage,
             });
-        } catch (err) {
-            if (err.code === 'P2025') {
-                return res.status(404).json({ status: false, message: 'Image not found' });
-            }
-            return res.status(500).json({ status: false, message: 'Internal server error' });
+        } catch (error) {
+            next(error);
         }
     }
 }
