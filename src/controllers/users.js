@@ -1,7 +1,7 @@
 const User = require('../services/users');
 
 class UserController {
-  async getAllUsers(req, res , next) {
+  async getAllUsers(req, res, next) {
     try {
       const users = await User.getAllUsers();
 
@@ -11,7 +11,7 @@ class UserController {
     }
   }
 
-  async getUserById(req, res , next) {
+  async getUserById(req, res, next) {
     try {
       const userId = req.params.id;
 
@@ -23,7 +23,7 @@ class UserController {
     }
   }
 
-  async renderUser(req, res , next) {
+  async renderUser(req, res, next) {
     try {
       const userId = req.params.id;
 

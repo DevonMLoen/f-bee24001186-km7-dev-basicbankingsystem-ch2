@@ -6,7 +6,7 @@ class AuthController {
     this.auth = new Auth();
   }
 
-  async login(req, res ,next) {
+  async login(req, res, next) {
     try {
       const { email, password } = req.body;
       const result = await this.auth.login(email, password);
@@ -16,12 +16,17 @@ class AuthController {
     }
   }
 
-  async logout(req, res) {
-    const result = await this.auth.logout();
-    res.json(result);
+  async logout(req, res, next) {
+    try {
+      const result = await this.auth.logout();
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
   }
 
-  async resetPassword(req, res , next) {
+
+  async resetPassword(req, res, next) {
     const userId = req.user.id;
     const { newPassword } = req.body;
     try {

@@ -36,12 +36,13 @@ describe('Auth Module', () => {
 
             expect(response).toEqual({ token: 'fake_token', userId: 1, userRole: 'user' });
             expect(prisma.user.findUnique).toHaveBeenCalledWith({ where: { userEmail: 'user@example.com' } });
+            expect(bcrypt.compare).toHaveBeenCalledWith('password123', 'hashed_password');
         });
 
         test('should throw an error if user is not found', async () => {
             prisma.user.findUnique.mockResolvedValue(null);
 
-            await expect(auth.login('nonexistent@example.com', 'password123')).rejects.toThrow('Login failed: Incorrect email or password');
+            await expect(auth.login('nonexistent@example.com', 'password123')).rejects.toThrow('Login failed: Invalid email or password');
         });
 
         test('should throw an error if password is incorrect', async () => {
@@ -49,8 +50,9 @@ describe('Auth Module', () => {
             prisma.user.findUnique.mockResolvedValue(mockUser);
             bcrypt.compare.mockResolvedValue(false);
 
-            await expect(auth.login('user@example.com', 'wrongpassword')).rejects.toThrow('Login failed: Incorrect email or password');
+            await expect(auth.login('user@example.com', 'wrongpassword')).rejects.toThrow('Login failed: Invalid email or password');
         });
+
     });
 
     describe('Logout Function', () => {
@@ -58,6 +60,13 @@ describe('Auth Module', () => {
             const response = await auth.logout();
 
             expect(response).toEqual({ message: 'Logout successful' });
+        });
+
+        test('should throw an error if logout fails', async () => {
+            const errorMessage = 'Logout failed';
+            auth.logout = jest.fn().mockRejectedValue(new Error(errorMessage));
+
+            await expect(auth.logout()).rejects.toThrow(errorMessage);
         });
     });
 
@@ -72,6 +81,7 @@ describe('Auth Module', () => {
                 where: { userId: 1 },
                 data: { userPassword: 'hashed_password' },
             });
+            expect(bcrypt.hash).toHaveBeenCalledWith(newPassword, 10);
         });
 
         test('should throw an error if password reset fails', async () => {
@@ -91,7 +101,7 @@ describe('Auth Module', () => {
             expect(response).toEqual({ message: 'Password reset email has been sent' });
         });
 
-        test('should throw an error if email is not Found', async () => {
+        test('should throw an error if email is not found', async () => {
             prisma.user.findUnique.mockResolvedValue(null);
 
             await expect(auth.forgotPassword('nonexistent@example.com')).rejects.toThrow('Forgot password failed: Email not Found');

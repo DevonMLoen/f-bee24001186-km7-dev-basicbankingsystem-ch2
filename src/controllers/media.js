@@ -3,6 +3,7 @@ const Image = require("../services/media");
 class ImageController {
     static async storageImage(req, res, next) {
         try {
+
             const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
 
             return res.status(200).json({
@@ -23,7 +24,7 @@ class ImageController {
             const uploadFile = await Image.uploadToImageKit(req.file);
             const newImage = await Image.createImageRecord(req.file, uploadFile.url, uploadFile.fileId, req.user.id, req.body.description);
 
-            return res.json({
+            return res.status(200).json({
                 status: true,
                 message: 'success',
                 data: {
@@ -38,11 +39,11 @@ class ImageController {
         }
     }
 
-    static async getAllImages(req, res , next) {
+    static async getAllImages(req, res, next) {
         try {
             const images = await Image.getAllImages();
 
-            return res.json({
+            return res.status(200).json({
                 status: true,
                 message: 'success',
                 data: images,
@@ -52,7 +53,7 @@ class ImageController {
         }
     }
 
-    static async getImageById(req, res , next) {
+    static async getImageById(req, res, next) {
         try {
             const image = await Image.getImageById(req.params.id);
 
@@ -70,10 +71,10 @@ class ImageController {
         }
     }
 
-    static async deleteImage(req, res , next) {
+    static async deleteImage(req, res, next) {
         try {
             await Image.deleteImage(req.params.id);
-            return res.json({
+            return res.status(200).json({
                 status: true,
                 message: 'Image deleted successfully',
             });
@@ -86,7 +87,7 @@ class ImageController {
         try {
             const updatedImage = await Image.updateImage(req.params.id, req.body.title, req.body.description);
 
-            return res.json({
+            return res.status(200).json({
                 status: true,
                 message: 'Image updated successfully',
                 data: updatedImage,

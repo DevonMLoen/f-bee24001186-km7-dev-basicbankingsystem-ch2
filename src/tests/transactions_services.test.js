@@ -214,15 +214,20 @@ describe('Transaction Service', () => {
             });
         });
 
-        it('should return null if transaction is not found', async () => {
-            prisma.transaction.findUnique.mockResolvedValue(null);
+        it('should throw an error if an exception is thrown during retrieval', async () => {
+            prisma.transaction.findUnique.mockRejectedValue(new Error('Database error'));
 
-            const transaction = await Transaction.getTransactionById(999); // non-existent transaction
+            await expect(Transaction.getTransactionById(1)).rejects.toThrow('Failed to get Transaction : Database error');
+        });
 
-            expect(transaction).toBeNull();
+        it('should throw an error if no transaction is found by ID', async () => {
+            prisma.transaction.findUnique.mockResolvedValue(null); // Simulate no transaction found
+
+            await expect(Transaction.getTransactionById(1)).rejects.toThrow('No transactions were found.');
+
             expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
                 where: {
-                    transactionId: 999,
+                    transactionId: 1,
                 },
                 include: {
                     bankAccountSource: true,
@@ -231,10 +236,20 @@ describe('Transaction Service', () => {
             });
         });
 
-        it('should throw an error if an exception is thrown during retrieval', async () => {
-            prisma.transaction.findUnique.mockRejectedValue(new Error('Database error'));
+        it('should throw an error if an exception occurs during retrieval', async () => {
+            prisma.transaction.findUnique.mockRejectedValue(new Error('Database error')); // Simulate error
 
             await expect(Transaction.getTransactionById(1)).rejects.toThrow('Failed to get Transaction : Database error');
+
+            expect(prisma.transaction.findUnique).toHaveBeenCalledWith({
+                where: {
+                    transactionId: 1,
+                },
+                include: {
+                    bankAccountSource: true,
+                    bankAccountDestination: true,
+                },
+            });
         });
     });
 });

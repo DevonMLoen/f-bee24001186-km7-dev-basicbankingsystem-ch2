@@ -1,14 +1,13 @@
 const Profile = require('../services/profiles');
 const prisma = require('../db');
+const { HttpError } = require('../middleware/errorhandling');
 
-jest.mock('../db', () => {
-    return {
-        profile: {
-            create: jest.fn(),
-            findUnique: jest.fn(),
-        },
-    };
-});
+jest.mock('../db', () => ({
+    profile: {
+        create: jest.fn(),
+        findUnique: jest.fn(),
+    },
+}));
 
 describe('Profile Service', () => {
     describe('createProfile', () => {

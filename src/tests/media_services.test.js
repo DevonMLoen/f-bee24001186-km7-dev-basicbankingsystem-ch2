@@ -150,13 +150,6 @@ describe('Image Service', () => {
             expect(result).toEqual(image);
         });
 
-        it('should return null if the image does not exist', async () => {
-            prisma.image.findUnique.mockResolvedValue(null);
-
-            const result = await Image.getImageById(1);
-            expect(result).toBeNull();
-        });
-
         it('should throw HttpError if image not found', async () => {
             prisma.image.findUnique.mockResolvedValue(null);
 

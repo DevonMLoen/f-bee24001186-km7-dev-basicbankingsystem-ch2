@@ -21,54 +21,65 @@ describe('AuthController', () => {
 
     res = {
       json: jest.fn(),
-      status: jest.fn().mockReturnThis(),
+      status: jest.fn().mockReturnThis(), // Mock return this to chain methods
     };
 
-    next = jest.fn();
+    next = jest.fn(); // Mock the next function
   });
 
   describe('login', () => {
     it('should return a successful response on login', async () => {
       req.body = { email: 'test@example.com', password: 'password123' };
-      const expectedResult = { message: 'Login successful' };
+      const expectedResult = { status: true, message: 'Login successful', token: 'fake-jwt-token' };
       Auth.prototype.login.mockResolvedValue(expectedResult);
 
-      await authController.login(req, res);
+      await authController.login(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(expectedResult);
+      expect(res.status).not.toHaveBeenCalled(); // No status needed for success
     });
 
     it('should return an error response on login failure', async () => {
-
       req.body = { email: 'test@example.com', password: 'wrongpassword' };
       const expectedError = new Error('Invalid credentials');
       Auth.prototype.login.mockRejectedValue(expectedError);
 
-      await authController.login(req, res);
+      await authController.login(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ message: expectedError.message });
+      // Check if next(error) was called
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 
   describe('logout', () => {
-    it('should return a successful response on logout', async () => {
-      const expectedResult = { message: 'Logout successful' };
+    it('should logout successfully', async () => {
+      const expectedResult = { status: true, message: 'Logout successful' };
       Auth.prototype.logout.mockResolvedValue(expectedResult);
 
       await authController.logout(req, res);
 
       expect(res.json).toHaveBeenCalledWith(expectedResult);
+      expect(res.status).not.toHaveBeenCalled(); // No status needed for success
+    });
+
+    it('should handle logout failure', async () => {
+      const expectedError = new Error('Logout failed');
+      Auth.prototype.logout.mockRejectedValue(expectedError);
+
+      await authController.logout(req, res, next);
+
+      // Ensure that next is called with the error
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 
   describe('resetPassword', () => {
     it('should reset password successfully', async () => {
       req.body.newPassword = 'newpassword123';
-      const expectedResult = { message: 'Password reset successful' };
+      const expectedResult = { status: true, message: 'Password reset successful' };
       Auth.prototype.resetPassword.mockResolvedValue(expectedResult);
 
-      await authController.resetPassword(req, res);
+      await authController.resetPassword(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(expectedResult);
     });
@@ -78,19 +89,19 @@ describe('AuthController', () => {
       const expectedError = new Error('Reset failed');
       Auth.prototype.resetPassword.mockRejectedValue(expectedError);
 
-      await authController.resetPassword(req, res);
+      await authController.resetPassword(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ message: expectedError.message });
+      // Check if next(error) was called
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 
   describe('forgotPassword', () => {
     it('should return a successful response on forgot password', async () => {
-      const expectedResult = { message: 'Reset link sent' };
+      const expectedResult = { status: true, message: 'Reset link sent' };
       Auth.prototype.forgotPassword.mockResolvedValue(expectedResult);
 
-      await authController.forgotPassword(req, res);
+      await authController.forgotPassword(req, res, next);
 
       expect(res.json).toHaveBeenCalledWith(expectedResult);
     });
@@ -99,10 +110,10 @@ describe('AuthController', () => {
       const expectedError = new Error('User not found');
       Auth.prototype.forgotPassword.mockRejectedValue(expectedError);
 
-      await authController.forgotPassword(req, res);
+      await authController.forgotPassword(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: expectedError.message });
+      // Check if next(error) was called
+      expect(next).toHaveBeenCalledWith(expectedError);
     });
   });
 
@@ -156,6 +167,7 @@ describe('AuthController', () => {
 
       await authController.signup(req, res, next);
 
+      // Ensure that next is called with the error
       expect(next).toHaveBeenCalledWith(expectedError);
     });
   });

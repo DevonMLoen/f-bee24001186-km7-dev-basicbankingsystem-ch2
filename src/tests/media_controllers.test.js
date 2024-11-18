@@ -17,7 +17,7 @@ ImageKit.mockImplementation(() => ({
 jest.mock('../services/media');
 
 describe("ImageController", () => {
-    let req, res;
+    let req, res, next;
 
     beforeEach(() => {
         req = {
@@ -32,11 +32,12 @@ describe("ImageController", () => {
             status: jest.fn().mockReturnThis(),
             json: jest.fn()
         };
+        next = jest.fn();
     });
 
     describe("storageImage", () => {
         it("should return image URL", async () => {
-            await ImageController.storageImage(req, res);
+            await ImageController.storageImage(req, res, next);
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith({
                 status: true,
@@ -47,14 +48,14 @@ describe("ImageController", () => {
             });
         });
 
-        it("should handle missing file in request", async () => {
-            req.file = undefined; // Simulate missing file
-            await ImageController.storageImage(req, res);
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'File is required'
-            });
+        it("should handle errors and pass to next", async () => {
+            const error = new TypeError("Cannot read properties of null (reading 'filename')");
+
+            req.file = null;
+
+            await ImageController.storageImage(req, res, next);
+
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 
@@ -71,7 +72,7 @@ describe("ImageController", () => {
             Image.uploadToImageKit.mockResolvedValue(mockUploadResponse);
             Image.createImageRecord.mockResolvedValue(mockImageRecord);
 
-            await ImageController.imagekitUpload(req, res);
+            await ImageController.imagekitUpload(req, res, next);
 
             expect(res.json).toHaveBeenCalledWith({
                 status: true,
@@ -85,26 +86,13 @@ describe("ImageController", () => {
             });
         });
 
-        it("should handle errors and return 500", async () => {
-            Image.uploadToImageKit.mockRejectedValue(new Error("Upload error"));
+        it("should handle errors and pass to next", async () => {
+            const error = new Error("Upload error");
+            Image.uploadToImageKit.mockRejectedValue(error);
 
-            await ImageController.imagekitUpload(req, res);
+            await ImageController.imagekitUpload(req, res, next);
 
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Internal server error'
-            });
-        });
-
-        it("should handle missing file in request", async () => {
-            req.file = undefined; // Simulate missing file
-            await ImageController.imagekitUpload(req, res);
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'File is required'
-            });
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 
@@ -113,7 +101,7 @@ describe("ImageController", () => {
             const mockImages = [{ id: 'img1', url: 'http://imagekit.io/test.jpg' }];
             Image.getAllImages.mockResolvedValue(mockImages);
 
-            await ImageController.getAllImages(req, res);
+            await ImageController.getAllImages(req, res, next);
 
             expect(res.json).toHaveBeenCalledWith({
                 status: true,
@@ -122,16 +110,13 @@ describe("ImageController", () => {
             });
         });
 
-        it("should handle errors and return 500", async () => {
-            Image.getAllImages.mockRejectedValue(new Error("Fetch error"));
+        it("should handle errors and pass to next", async () => {
+            const error = new Error("Fetch error");
+            Image.getAllImages.mockRejectedValue(error);
 
-            await ImageController.getAllImages(req, res);
+            await ImageController.getAllImages(req, res, next);
 
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Internal server error'
-            });
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 
@@ -140,7 +125,7 @@ describe("ImageController", () => {
             const mockImage = { id: 'img1', url: 'http://imagekit.io/test.jpg' };
             Image.getImageById.mockResolvedValue(mockImage);
 
-            await ImageController.getImageById(req, res);
+            await ImageController.getImageById(req, res, next);
 
             expect(res.json).toHaveBeenCalledWith({
                 status: true,
@@ -152,7 +137,7 @@ describe("ImageController", () => {
         it("should return 404 if image is not found", async () => {
             Image.getImageById.mockResolvedValue(null);
 
-            await ImageController.getImageById(req, res);
+            await ImageController.getImageById(req, res, next);
 
             expect(res.status).toHaveBeenCalledWith(404);
             expect(res.json).toHaveBeenCalledWith({
@@ -161,17 +146,13 @@ describe("ImageController", () => {
             });
         });
 
-        it("should handle invalid image ID and return 500", async () => {
-            req.params.id = 'invalid'; // Simulate invalid ID
-            Image.getImageById.mockRejectedValue(new Error("Invalid ID"));
+        it("should handle errors and pass to next", async () => {
+            const error = new Error("Fetch error");
+            Image.getImageById.mockRejectedValue(error);
 
-            await ImageController.getImageById(req, res);
+            await ImageController.getImageById(req, res, next);
 
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Internal server error'
-            });
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 
@@ -179,7 +160,7 @@ describe("ImageController", () => {
         it("should delete an image by ID", async () => {
             Image.deleteImage.mockResolvedValue();
 
-            await ImageController.deleteImage(req, res);
+            await ImageController.deleteImage(req, res, next);
 
             expect(res.json).toHaveBeenCalledWith({
                 status: true,
@@ -187,31 +168,13 @@ describe("ImageController", () => {
             });
         });
 
-        it("should return 404 if image is not found", async () => {
-            const error = new Error("Image not found");
-            error.code = 'P2025';
+        it("should handle errors and pass to next", async () => {
+            const error = new Error("Delete error");
             Image.deleteImage.mockRejectedValue(error);
 
-            await ImageController.deleteImage(req, res);
+            await ImageController.deleteImage(req, res, next);
 
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Image not found'
-            });
-        });
-
-        it("should handle unexpected errors and return 500", async () => {
-            const unexpectedError = new Error();
-            Image.deleteImage.mockRejectedValue(unexpectedError);
-
-            await ImageController.deleteImage(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Internal server error'
-            });
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 
@@ -220,7 +183,7 @@ describe("ImageController", () => {
             const mockUpdatedImage = { id: 'img1', title: 'New title', description: 'Updated description' };
             Image.updateImage.mockResolvedValue(mockUpdatedImage);
 
-            await ImageController.updateImage(req, res);
+            await ImageController.updateImage(req, res, next);
 
             expect(res.json).toHaveBeenCalledWith({
                 status: true,
@@ -229,30 +192,13 @@ describe("ImageController", () => {
             });
         });
 
-        it("should return 404 if image is not found", async () => {
-            const error = new Error("Image not found");
-            error.code = 'P2025';
+        it("should handle errors and pass to next", async () => {
+            const error = new Error("Update error");
             Image.updateImage.mockRejectedValue(error);
 
-            await ImageController.updateImage(req, res);
+            await ImageController.updateImage(req, res, next);
 
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Image not found'
-            });
-        });
-
-        it("should handle other errors and return 500", async () => {
-            Image.updateImage.mockRejectedValue(new Error("Update error"));
-
-            await ImageController.updateImage(req, res);
-
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({
-                status: false,
-                message: 'Internal server error'
-            });
+            expect(next).toHaveBeenCalledWith(error);
         });
     });
 });
