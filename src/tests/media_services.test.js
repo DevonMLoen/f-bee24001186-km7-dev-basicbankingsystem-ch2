@@ -45,6 +45,13 @@ describe('Image Service', () => {
             expect(result).toEqual(uploadResponse);
         });
 
+        it("should throw error if file or buffer is missing", async () => {
+            const invalidFile = null;
+    
+            await expect(Image.uploadToImageKit(invalidFile))
+                .rejects.toThrow(new HttpError('Failed to upload image to ImageKit: Invalid file data: Missing or undefined buffer', 400));
+        });
+
         it('should handle upload failure', async () => {
             imagekit.upload.mockRejectedValue(new Error('Upload failed'));
 
@@ -204,16 +211,30 @@ describe('Image Service', () => {
 
     describe('updateImage', () => {
         it('should update the image title and description', async () => {
+            prisma.image.findUnique.mockResolvedValue({
+                id: 1,
+                title: 'Updated Title',
+                description: 'Updated Description',
+            });
+        
             const updatedImage = { id: 1, title: 'Updated Title', description: 'Updated Description' };
             prisma.image.update.mockResolvedValue(updatedImage);
-
+        
             const result = await Image.updateImage(1, 'Updated Title', 'Updated Description');
+        
+            expect(prisma.image.findUnique).toHaveBeenCalledWith({
+                where: { id: 1 },
+            });
+        
             expect(prisma.image.update).toHaveBeenCalledWith({
                 where: { id: 1 },
                 data: { title: 'Updated Title', description: 'Updated Description' },
             });
+        
+            // Periksa hasil
             expect(result).toEqual(updatedImage);
         });
+        
 
         it('should handle update failure', async () => {
             prisma.image.update.mockRejectedValue(new Error("Update error"));
@@ -221,10 +242,14 @@ describe('Image Service', () => {
             await expect(Image.updateImage(1, 'Updated Title', 'Updated Description')).rejects.toThrow(HttpError);
         });
 
-        it('should throw HttpError if image not found on update', async () => {
-            prisma.image.update.mockResolvedValue(null);
-
-            await expect(Image.updateImage(1, 'Updated Title', 'Updated Description')).rejects.toThrow(HttpError);
+        it('should throw an error if the image is not found', async () => {
+            prisma.image.findUnique.mockResolvedValue(null);
+    
+            await expect(Image.updateImage(1, 'Updated Title', 'Updated Description'))
+                .rejects.toThrow(new HttpError('Failed to update image: Image not found', 404));
+            expect(prisma.image.findUnique).toHaveBeenCalledWith({
+                where: { id: 1 },
+            });
         });
     });
 });

@@ -5,6 +5,10 @@ const { HttpError } = require("../middleware/errorhandling");
 class Image {
     static async uploadToImageKit(file) {
         try {
+            if (!file || !file.buffer) {
+                throw new HttpError('Invalid file data: Missing or undefined buffer', 400);
+            }
+
             const stringFile = file.buffer.toString("base64");
 
             return await imagekit.upload({

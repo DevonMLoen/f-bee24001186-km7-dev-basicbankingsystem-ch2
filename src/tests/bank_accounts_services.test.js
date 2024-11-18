@@ -69,6 +69,12 @@ describe("BankAccount Class", () => {
       expect(accounts).toEqual(mockAccounts);
     });
 
+    test("should throw error if no bank accounts are found", async () => {
+      prisma.bankAccount.findMany.mockResolvedValue([]);
+  
+      await expect(BankAccount.getAllBankAccounts()).rejects.toThrow("Bank accounts not found");
+  });
+
     test("should throw error if fetch fails", async () => {
       prisma.bankAccount.findMany.mockRejectedValue(new Error("Database error"));
 
