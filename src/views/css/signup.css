@@ -1,0 +1,173 @@
+/* Reset default margin dan padding */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Mengatur body */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 10px; /* Menghindari konten menyentuh sisi layar */
+}
+
+/* Container utama form */
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 360px; /* Mempersempit lebar maksimal */
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    animation: fadeIn 0.8s ease-in-out;
+    flex-direction: column;
+}
+
+/* Heading */
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* Pesan error */
+.error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Form styling */
+form {
+    width: 100%;
+}
+
+/* Styling label */
+form label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Styling input, select dan textarea */
+form input[type="text"],
+form input[type="password"],
+form input[type="email"],
+form select,
+form textarea {
+    width: 100%;
+    padding: 8px; /* Mengurangi padding untuk tampilan lebih ramping */
+    margin-bottom: 12px; /* Mengurangi margin antar elemen */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px; /* Ukuran font sedikit lebih kecil */
+    transition: all 0.3s ease; /* Animasi transisi saat fokus */
+}
+
+/* Fokus input */
+form input[type="text"]:focus,
+form input[type="password"]:focus,
+form input[type="email"]:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
+    border-color: #8f94fb;
+    box-shadow: 0 0 5px rgba(143, 148, 251, 0.5);
+}
+
+/* Styling textarea untuk address */
+form textarea {
+    resize: vertical; /* memungkinkan pengguna untuk mengubah ukuran textarea */
+    height: 80px; /* Ukuran default lebih kecil untuk address */
+}
+
+/* Styling tombol */
+form button {
+    width: 100%;
+    padding: 10px; /* Mengurangi padding pada tombol */
+    background: #4e54c8;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-bottom: 10px; /* Memberikan sedikit jarak di bawah tombol */
+}
+
+/* Hover efek pada tombol */
+form button:hover {
+    background: #373bb3;
+}
+
+/* Footer dengan link ke login */
+.form-footer {
+    text-align: center;
+    margin-top: 10px; /* Mengurangi jarak dengan form */
+}
+
+/* Styling link */
+.form-footer a {
+    font-size: 14px;
+    color: #4e54c8;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+/* Hover efek pada link */
+.form-footer a:hover {
+    color: #373bb3;
+}
+
+/* Animasi fadeIn */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 15px; /* Mengurangi padding untuk layar lebih kecil */
+        max-width: 100%; /* Memastikan form tetap lebar sesuai layar */
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    form input[type="text"],
+    form input[type="password"],
+    form input[type="email"],
+    form select,
+    form textarea {
+        font-size: 14px; /* Ukuran font lebih kecil pada layar kecil */
+        padding: 8px;
+    }
+
+    form button {
+        padding: 12px; /* Membuat tombol sedikit lebih besar di perangkat mobile */
+    }
+
+    .form-footer {
+        margin-top: 15px;
+    }
+}

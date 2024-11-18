@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="./css/signup.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Register</h1>
+
+        <!-- Tampilkan pesan error jika ada -->
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="error-message">
+                <%= message %>
+            </div>
+        <% } %>
+
+        <!-- Form registrasi -->
+        <form action="/register" method="POST">
+            <label for="userName">Username:</label>
+            <input type="text" name="userName" required>
+
+            <label for="userEmail">Email:</label>
+            <input type="email" name="userEmail" required>
+
+            <label for="userPassword">Password:</label>
+            <input type="password" name="userPassword" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" name="confirmPassword" required>
+
+            <!-- Dropdown untuk Profile Type -->
+            <label for="profileType">Profile Type:</label>
+            <select name="profileType" required>
+                <option value="individual">Individual</option>
+                <option value="company">Company</option>
+            </select>
+
+            <label for="profileNumber">Profile Number:</label>
+            <input type="text" name="profileNumber" required>
+
+            <label for="address">Address:</label>
+            <textarea name="address" required></textarea>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <!-- Tautan ke halaman login -->
+        <div class="form-footer">
+            Already have an account? <a href="/login">Login</a>
+        </div>
+    </div>
+
+    <script>
+        // Menunggu DOM selesai dimuat
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.querySelector('form');
+            signupForm.addEventListener('submit', async function (e) {
+                e.preventDefault();  // Mencegah form melakukan submit secara default
+
+                // Ambil data dari form
+                const formData = new FormData(signupForm);
+                const data = {
+                    userName: formData.get('userName'),
+                    userEmail: formData.get('userEmail'),
+                    userPassword: formData.get('userPassword'),
+                    confirmPassword: formData.get('confirmPassword'),
+                    profileType: formData.get('profileType'),
+                    profileNumber: formData.get('profileNumber'),
+                    address: formData.get('address')
+                };
+
+                // Validasi password dan konfirmasi password
+                if (data.userPassword !== data.confirmPassword) {
+                    alert("Password dan konfirmasi password tidak cocok!");
+                    return;
+                }
+
+                try {
+                    const response = await fetch('/api/v1/auths/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            userName: data.userName,
+                            userEmail: data.userEmail,
+                            userPassword: data.userPassword,
+                            profileType: data.profileType,
+                            profileNumber: data.profileNumber,
+                            address: data.address
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        console.log(result);
+                        alert('Registrasi berhasil! Selamat datang, ' + result.newUser.userName);
+                        window.location.href = '/login';
+                    } else {
+                        alert('Registrasi gagal: ' + result.message);
+                    }
+                } catch (error) {
+                    console.error('Terjadi kesalahan:', error);
+                    alert('Terjadi kesalahan pada server. Coba lagi nanti.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
