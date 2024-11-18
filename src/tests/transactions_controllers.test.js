@@ -1,5 +1,5 @@
 const Transaction = require('../services/transactions');
-const TransactionController = require('../controllers/Transactions');
+const TransactionController = require('../controllers/transactions');
 
 jest.mock('../services/transactions'); // Mock the Transaction service
 
