@@ -3,7 +3,10 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main  # Branch yang akan memicu deploy
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
