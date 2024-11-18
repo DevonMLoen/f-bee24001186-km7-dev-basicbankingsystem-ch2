@@ -46,6 +46,10 @@ class BankAccount {
                 },
             });
 
+            if(!bankAccounts || bankAccounts.length == 0){
+                throw new HttpError('Bank accounts not found', 404);
+            }
+
             return bankAccounts;
         } catch (error) {
             throw new HttpError('Failed to get all bank accounts : ' + error.message, error.statusCode);

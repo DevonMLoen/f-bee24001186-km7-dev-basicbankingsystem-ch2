@@ -43,9 +43,9 @@ class Transaction {
 
   async getAccount(tx, accountId) {
     const account = await tx.bankAccount.findUnique({
-      where: { bankAccountId: accountId },
+      where: { bankAccountId: parseInt(accountId) },
     });
-
+    
     if (!account) {
       throw new HttpError(`Account with ID ${accountId} not found`, 404);
     }

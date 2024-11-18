@@ -92,14 +92,20 @@ class Image {
 
     static async updateImage(id, title, description) {
         try {
-            const image = await prisma.image.update({
+            const image = await prisma.image.findUnique({
                 where: { id: parseInt(id) },
-                data: { title, description },
             });
 
             if (!image) {
                 throw new HttpError("Image not found", 404);
             }
+
+            await prisma.image.update({
+                where: { id: parseInt(id) },
+                data: { title, description },
+            });
+
+
 
             return image;
         } catch (error) {
