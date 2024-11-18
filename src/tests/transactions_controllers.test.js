@@ -1,121 +1,109 @@
-const TransactionController = require('../controllers/transactions');
 const Transaction = require('../services/transactions');
+const TransactionController = require('../controllers/Transactions');
 
-jest.mock('../services/transactions');
+jest.mock('../services/transactions'); // Mock the Transaction service
 
 describe('TransactionController', () => {
-  let transactionController;
-  let req;
-  let res;
+    let req, res, next;
 
-  beforeEach(() => {
-    transactionController = TransactionController; 
-
-    req = {
-      body: {},
-      params: { id: 1 },
-    };
-
-    res = {
-      json: jest.fn(),
-      status: jest.fn().mockReturnThis(),
-    };
-  });
-
-  describe('getAllTransactions', () => {
-    it('should return all transactions', async () => {
-      const mockTransactions = [{ id: 1, sourceAccountId: 1, destinationAccountId: 2, amount: 100 }];
-      Transaction.getAllTransactions.mockResolvedValue(mockTransactions);
-
-      await transactionController.getAllTransactions(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(mockTransactions);
+    beforeEach(() => {
+        req = { body: {}, params: {} }; // Mock request object
+        res = {
+            status: jest.fn().mockReturnThis(), // Mock response methods
+            json: jest.fn(),
+        };
+        next = jest.fn(); // Mock next function
     });
 
-    it('should return a 404 if no transactions are found', async () => {
-      Transaction.getAllTransactions.mockResolvedValue([]);
-
-      await transactionController.getAllTransactions(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'No transactions were found.' });
+    afterEach(() => {
+        jest.clearAllMocks(); // Clear all mocks after each test
     });
 
-    it('should handle errors', async () => {
-      const mockError = new Error('Server error');
-      Transaction.getAllTransactions.mockRejectedValue(mockError);
+    describe('getAllTransactions', () => {
+        test('should return all transactions with status 200', async () => {
+            const mockTransactions = [{ id: 1, amount: 100 }, { id: 2, amount: 200 }];
+            Transaction.getAllTransactions.mockResolvedValue(mockTransactions);
 
-      await transactionController.getAllTransactions(req, res);
+            await TransactionController.getAllTransactions(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: mockError.message });
-    });
-  });
+            expect(Transaction.getAllTransactions).toHaveBeenCalled();
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(mockTransactions);
+        });
 
-  describe('createTransaction', () => {
-    it('should create a new transaction', async () => {
-      req.body = {
-        sourceAccountId: 1,
-        destinationAccountId: 2,
-        amount: 100,
-      };
-      const mockTransactionResult = { id: 1, sourceAccountId: 1, destinationAccountId: 2, amount: 100 };
-      Transaction.prototype.createTransaction.mockResolvedValue(mockTransactionResult);
+        test('should call next with an error if service fails', async () => {
+            const mockError = new Error('Failed to fetch transactions');
+            Transaction.getAllTransactions.mockRejectedValue(mockError);
 
-      await transactionController.createTransaction(req, res);
+            await TransactionController.getAllTransactions(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith({
-        message: 'Transaction successful',
-        transaction: mockTransactionResult,
-      });
+            expect(next).toHaveBeenCalledWith(mockError);
+        });
     });
 
-    it('should handle errors during transaction creation', async () => {
-      req.body = {
-        sourceAccountId: 1,
-        destinationAccountId: 2,
-        amount: 100,
-      };
-      const mockError = new Error('Failed to create transaction');
-      Transaction.prototype.createTransaction.mockRejectedValue(mockError);
+    describe('createTransaction', () => {
+        test('should create a transaction and return 201 with transaction data', async () => {
+            const mockRequestBody = {
+                sourceAccountId: 1,
+                destinationAccountId: 2,
+                amount: 100,
+            };
+            const mockTransactionResult = { id: 1, ...mockRequestBody };
+            req.body = mockRequestBody;
 
-      await transactionController.createTransaction(req, res);
+            Transaction.mockImplementation(() => ({
+                createTransaction: jest.fn().mockResolvedValue(mockTransactionResult),
+            }));
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: mockError.message });
+            await TransactionController.createTransaction(req, res, next);
+
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith({
+                message: 'Transaction successful',
+                transaction: mockTransactionResult,
+            });
+        });
+
+        test('should call next with an error if transaction creation fails', async () => {
+            const mockRequestBody = {
+                sourceAccountId: 1,
+                destinationAccountId: 2,
+                amount: 100,
+            };
+            const mockError = new Error('Transaction failed');
+            req.body = mockRequestBody;
+
+            Transaction.mockImplementation(() => ({
+                createTransaction: jest.fn().mockRejectedValue(mockError),
+            }));
+
+            await TransactionController.createTransaction(req, res, next);
+
+            expect(next).toHaveBeenCalledWith(mockError);
+        });
     });
-  });
 
-  describe('getTransactionById', () => {
-    it('should return a transaction by ID', async () => {
-      const mockTransaction = { id: 1, sourceAccountId: 1, destinationAccountId: 2, amount: 100 };
-      Transaction.getTransactionById.mockResolvedValue(mockTransaction);
+    describe('getTransactionById', () => {
+        test('should return transaction by ID with status 200', async () => {
+            const mockTransaction = { id: 1, amount: 100 };
+            req.params.id = '1';
+            Transaction.getTransactionById.mockResolvedValue(mockTransaction);
 
-      await transactionController.getTransactionById(req, res);
+            await TransactionController.getTransactionById(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ transaction: mockTransaction });
+            expect(Transaction.getTransactionById).toHaveBeenCalledWith('1');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({ transaction: mockTransaction });
+        });
+
+        test('should call next with an error if service fails', async () => {
+            const mockError = new Error('Transaction not found');
+            req.params.id = '1';
+            Transaction.getTransactionById.mockRejectedValue(mockError);
+
+            await TransactionController.getTransactionById(req, res, next);
+
+            expect(next).toHaveBeenCalledWith(mockError);
+        });
     });
-
-    it('should return a 404 if no transaction is found', async () => {
-      Transaction.getTransactionById.mockResolvedValue(null);
-
-      await transactionController.getTransactionById(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'No transactions were found.' });
-    });
-
-    it('should handle errors', async () => {
-      const mockError = new Error('Server error');
-      Transaction.getTransactionById.mockRejectedValue(mockError);
-
-      await transactionController.getTransactionById(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'An error occurred on the server.' });
-    });
-  });
 });

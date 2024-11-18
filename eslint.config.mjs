@@ -2,7 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 
 export default [
-  pluginJs.configs.recommended,  
+  pluginJs.configs.recommended,
 
   {
     files: ["**/*.js"],
@@ -10,18 +10,34 @@ export default [
       sourceType: "commonjs",  
       globals: {
         ...globals.node,  
-        ...globals.jest,  
-        ...globals.browser,  
+        ...globals.jest,
+        ...globals.browser,
+        // require: "readonly",  
+        // module: "readonly",   
       },
     },
     rules: {
       "no-unused-vars": "off",  
-      "no-undef": "off",       
+      // "no-undef": "off",       
     },
     ignores: [
       "node_modules/**",
       "dist/**",
-      "src/controllers/**",
     ],
+  },
+
+  {
+    files: ["src/controllers/**/*.js"],  
+    languageOptions: {
+      globals: {
+        ...globals.node, 
+        // require: "readonly",
+        // module: "readonly",
+      },
+    },
+    rules: {
+      "no-unused-vars": "off",
+      // "no-undef": "off",
+    },
   },
 ];

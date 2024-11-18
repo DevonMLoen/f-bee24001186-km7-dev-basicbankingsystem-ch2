@@ -1,4 +1,5 @@
 const prisma = require("../db");
+const { HttpError } = require("../middleware/errorhandling");
 
 class Transaction {
   static prisma = prisma;
@@ -36,17 +37,17 @@ class Transaction {
       return transactionResult;
 
     } catch (error) {
-      throw new Error('Failed to Create transactions : ' + error.message);
+      throw new HttpError('Failed to Create transactions : ' + error.message, error.statusCode);
     }
   }
 
   async getAccount(tx, accountId) {
     const account = await tx.bankAccount.findUnique({
-      where: { bankAccountId: accountId },
+      where: { bankAccountId: parseInt(accountId) },
     });
-
+    
     if (!account) {
-      throw new Error(`Account with ID ${accountId} not found`);
+      throw new HttpError(`Account with ID ${accountId} not found`, 404);
     }
 
     return account;
@@ -54,7 +55,7 @@ class Transaction {
 
   checkSufficientBalance(account) {
     if (account.balance < this.amount) {
-      throw new Error('Insufficient balance in source account');
+      throw new HttpError('Insufficient balance in source account', 403);
     }
   }
 
@@ -73,9 +74,13 @@ class Transaction {
           bankAccountDestination: true,
         },
       });
+
+      if (!transactions || transactions.length === 0) {
+        throw new HttpError("No transactions were found.", 404);
+      }
       return transactions;
     } catch (error) {
-      throw new Error('Failed to retrieve transactions : ' + error.message);
+      throw new HttpError('Failed to retrieve transactions : ' + error.message, error.statusCode);
     }
   }
 
@@ -91,9 +96,13 @@ class Transaction {
         },
       });
 
+      if (!transaction || transaction.length === 0) {
+        throw new HttpError("No transactions were found.", 404);
+      }
+
       return transaction;
     } catch (error) {
-      throw new Error('Failed to get Transaction : ' + error.message);
+      throw new HttpError('Failed to get Transaction : ' + error.message, error.statusCode);
     }
   }
 }

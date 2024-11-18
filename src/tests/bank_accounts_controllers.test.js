@@ -4,13 +4,11 @@ const BankAccount = require('../services/bank_accounts');
 jest.mock('../services/bank_accounts');
 
 describe('BankAccountController', () => {
-  let bankAccountController;
   let req;
   let res;
+  let next;
 
   beforeEach(() => {
-    bankAccountController = BankAccountController;
-
     req = {
       body: {},
       params: { id: 1 },
@@ -20,6 +18,8 @@ describe('BankAccountController', () => {
       json: jest.fn(),
       status: jest.fn().mockReturnThis(),
     };
+
+    next = jest.fn();
   });
 
   describe('getAllBankAccounts', () => {
@@ -27,29 +27,19 @@ describe('BankAccountController', () => {
       const mockAccounts = [{ id: 1, name: 'Bank A', number: '123456', balance: 1000 }];
       BankAccount.getAllBankAccounts.mockResolvedValue(mockAccounts);
 
-      await bankAccountController.getAllBankAccounts(req, res);
+      await BankAccountController.getAllBankAccounts(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(mockAccounts);
-    });
-
-    it('should return a 404 if no bank accounts are found', async () => {
-      BankAccount.getAllBankAccounts.mockResolvedValue([]);
-
-      await bankAccountController.getAllBankAccounts(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'No bank accounts were found' });
     });
 
     it('should handle errors', async () => {
       const mockError = new Error('Server error');
       BankAccount.getAllBankAccounts.mockRejectedValue(mockError);
 
-      await bankAccountController.getAllBankAccounts(req, res);
+      await BankAccountController.getAllBankAccounts(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: mockError.message });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 
@@ -61,29 +51,23 @@ describe('BankAccountController', () => {
         bankAccountNumber: '123456',
         balance: 1000,
       };
+
       const mockNewAccount = { id: 1, name: 'Bank A', number: '123456', balance: 1000 };
       BankAccount.prototype.createAccount.mockResolvedValue(mockNewAccount);
 
-      await bankAccountController.createAccount(req, res);
+      await BankAccountController.createAccount(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith(mockNewAccount);
     });
 
     it('should handle errors during account creation', async () => {
-      req.body = {
-        userId: 1,
-        bankName: 'Bank A',
-        bankAccountNumber: '123456',
-        balance: 1000,
-      };
       const mockError = new Error('Failed to create bank account');
       BankAccount.prototype.createAccount.mockRejectedValue(mockError);
 
-      await bankAccountController.createAccount(req, res);
+      await BankAccountController.createAccount(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'Failed to create bank account', error: mockError.message });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 
@@ -92,29 +76,19 @@ describe('BankAccountController', () => {
       const mockAccount = { id: 1, name: 'Bank A', number: '123456', balance: 1000 };
       BankAccount.getBankAccountById.mockResolvedValue(mockAccount);
 
-      await bankAccountController.getBankAccountById(req, res);
+      await BankAccountController.getBankAccountById(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({ bankAccount: mockAccount });
-    });
-
-    it('should return a 404 if no bank account is found', async () => {
-      BankAccount.getBankAccountById.mockResolvedValue(null);
-
-      await bankAccountController.getBankAccountById(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: 'No bank accounts were found' });
     });
 
     it('should handle errors', async () => {
       const mockError = new Error('Server error');
       BankAccount.getBankAccountById.mockRejectedValue(mockError);
 
-      await bankAccountController.getBankAccountById(req, res);
+      await BankAccountController.getBankAccountById(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ message: 'An error occurred on the server.' });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 
@@ -123,7 +97,7 @@ describe('BankAccountController', () => {
       const mockResponse = { message: 'Bank account deleted' };
       BankAccount.deleteAccountById.mockResolvedValue(mockResponse);
 
-      await bankAccountController.deleteAccountById(req, res);
+      await BankAccountController.deleteAccountById(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(mockResponse);
@@ -133,10 +107,9 @@ describe('BankAccountController', () => {
       const mockError = new Error('Failed to delete bank account');
       BankAccount.deleteAccountById.mockRejectedValue(mockError);
 
-      await bankAccountController.deleteAccountById(req, res);
+      await BankAccountController.deleteAccountById(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: mockError.message });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 
@@ -147,10 +120,11 @@ describe('BankAccountController', () => {
         bankAccountNumber: '654321',
         balance: 2000,
       };
+
       const mockUpdatedAccount = { id: 1, name: 'Updated Bank', number: '654321', balance: 2000 };
       BankAccount.updateAccount.mockResolvedValue(mockUpdatedAccount);
 
-      await bankAccountController.updateAccount(req, res);
+      await BankAccountController.updateAccount(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
@@ -160,28 +134,23 @@ describe('BankAccountController', () => {
     });
 
     it('should handle errors during account update', async () => {
-      req.body = {
-        bankName: 'Updated Bank',
-        bankAccountNumber: '654321',
-        balance: 2000,
-      };
       const mockError = new Error('Failed to update bank account');
       BankAccount.updateAccount.mockRejectedValue(mockError);
 
-      await bankAccountController.updateAccount(req, res);
+      await BankAccountController.updateAccount(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: mockError.message });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 
   describe('withdraw', () => {
     it('should withdraw from a bank account', async () => {
       req.body.amount = 500;
+
       const mockUpdatedAccount = { id: 1, name: 'Bank A', number: '123456', balance: 500 };
       BankAccount.withdraw.mockResolvedValue(mockUpdatedAccount);
 
-      await bankAccountController.withdraw(req, res);
+      await BankAccountController.withdraw(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
@@ -191,24 +160,23 @@ describe('BankAccountController', () => {
     });
 
     it('should handle errors during withdrawal', async () => {
-      req.body.amount = 500;
       const mockError = new Error('Failed to withdraw');
       BankAccount.withdraw.mockRejectedValue(mockError);
 
-      await bankAccountController.withdraw(req, res);
+      await BankAccountController.withdraw(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: mockError.message });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 
   describe('deposit', () => {
     it('should deposit into a bank account', async () => {
       req.body.amount = 500;
+
       const mockUpdatedAccount = { id: 1, name: 'Bank A', number: '123456', balance: 1500 };
       BankAccount.deposit.mockResolvedValue(mockUpdatedAccount);
 
-      await bankAccountController.deposit(req, res);
+      await BankAccountController.deposit(req, res, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
@@ -218,14 +186,12 @@ describe('BankAccountController', () => {
     });
 
     it('should handle errors during deposit', async () => {
-      req.body.amount = 500;
       const mockError = new Error('Failed to deposit');
       BankAccount.deposit.mockRejectedValue(mockError);
 
-      await bankAccountController.deposit(req, res);
+      await BankAccountController.deposit(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: mockError.message });
+      expect(next).toHaveBeenCalledWith(mockError);
     });
   });
 });

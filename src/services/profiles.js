@@ -1,4 +1,5 @@
 const prisma = require("../db");
+const { HttpError } = require("../middleware/errorhandling");
 
 class Profile {
   static prisma = prisma;
@@ -20,7 +21,7 @@ class Profile {
       });
       return newProfile;
     } catch (error) {
-      throw new Error('Failed to create profile : ' + error.message);
+      throw new HttpError('Failed to create profile : ' + error.message,error.statusCode);
     }
   }
 
@@ -33,7 +34,7 @@ class Profile {
       });
       return profile;
     } catch (error) {
-      throw new Error('Failed to get profile : ' + error.message);
+      throw new HttpError('Failed to get profile : ' + error.message,error.statusCode);
     }
   }
 }

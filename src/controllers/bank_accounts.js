@@ -1,21 +1,17 @@
 const BankAccount = require('../services/bank_accounts');
 
 class BankAccountController {
-  async getAllBankAccounts(req, res) {
+  async getAllBankAccounts(req, res, next) {
     try {
       const bankaccounts = await BankAccount.getAllBankAccounts();
 
-      if (!bankaccounts || bankaccounts.length === 0) {
-        return res.status(404).json({ message: 'No bank accounts were found' });
-      }
-
       res.status(200).json(bankaccounts);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      next(error);
     }
   }
 
-  async createAccount(req, res) {
+  async createAccount(req, res, next) {
     try {
       const { userId, bankName, bankAccountNumber, balance } = req.body;
 
@@ -32,37 +28,34 @@ class BankAccountController {
 
       res.status(201).json(newBankAccount);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to create bank account', error: error.message });
+      next(error);
     }
   }
 
-  async getBankAccountById(req, res) {
+  async getBankAccountById(req, res, next) {
     try {
       const bankAccountId = req.params.id;
 
       const bankAccount = await BankAccount.getBankAccountById(bankAccountId);
-      if (!bankAccount || bankAccount.length === 0) {
-        return res.status(404).json({ message: 'No bank accounts were found' });
-      }
 
       res.status(200).json({ bankAccount });
     } catch (error) {
-      res.status(500).json({ message: 'An error occurred on the server.' });
+      next(error);
     }
   }
 
-  async deleteAccountById(req, res) {
+  async deleteAccountById(req, res, next) {
     const id = req.params.id;
 
     try {
       const response = await BankAccount.deleteAccountById(id);
       return res.status(200).json(response);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  async updateAccount(req, res) {
+  async updateAccount(req, res, next) {
     const id = req.params.id;
     const { bankName, bankAccountNumber, balance } = req.body;
 
@@ -77,11 +70,11 @@ class BankAccountController {
         account: updatedAccount,
       });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  async withdraw(req, res) {
+  async withdraw(req, res, next) {
     const id = req.params.id;
     const { amount } = req.body;
 
@@ -92,11 +85,11 @@ class BankAccountController {
         account: updatedAccount,
       });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      next(error);
     }
   }
 
-  async deposit(req, res) {
+  async deposit(req, res, next) {
     const id = req.params.id;
     const { amount } = req.body;
 
@@ -107,7 +100,7 @@ class BankAccountController {
         account: updatedAccount,
       });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      next(error)
     }
   }
 }

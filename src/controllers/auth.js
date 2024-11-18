@@ -6,39 +6,44 @@ class AuthController {
     this.auth = new Auth();
   }
 
-  async login(req, res) {
+  async login(req, res, next) {
     try {
       const { email, password } = req.body;
       const result = await this.auth.login(email, password);
       res.json(result);
     } catch (error) {
-      res.status(401).json({ message: error.message });
+      next(error)
     }
   }
 
-  async logout(req, res) {
-    const result = await this.auth.logout();
-    res.json(result);
+  async logout(req, res, next) {
+    try {
+      const result = await this.auth.logout();
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
   }
 
-  async resetPassword(req, res) {
+
+  async resetPassword(req, res, next) {
     const userId = req.user.id;
     const { newPassword } = req.body;
     try {
       const result = await this.auth.resetPassword(userId, newPassword);
       res.json(result);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      next(error);
     }
   }
 
-  async forgotPassword(req, res) {
+  async forgotPassword(req, res, next) {
     try {
       const email = req.user.email;
       const result = await this.auth.forgotPassword(email);
       res.json(result);
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      next(error);
     }
   }
 
