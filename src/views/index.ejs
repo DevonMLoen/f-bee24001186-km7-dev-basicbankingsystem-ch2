@@ -3,25 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - My Banking App</title>
-    <link rel="stylesheet" href="/styles.css">
+    <title>Bank Dashboard</title>
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to Binar Banking App</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Available Users</h2>
-            <ul>
-                <% users.forEach(user => { %>
-                    <li><a href="/api/v1/users/<%= user.userId %>/views">View <%= user.userName %></a></li>
-                <% }) %>
-            </ul>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Binar Banking App</p>
-    </footer>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>MyBank</h2>
+            <div class="nav-menu">
+                <a href="#">Dashboard</a>
+                <a href="#">Accounts</a>
+                <a href="#">Transactions</a>
+                <a href="#">Investments</a>
+                <a href="#">Settings</a>
+                <a href="#">Logout</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Welcome back, User!</h1>
+                <p>Your last login: 2024-11-12</p>
+            </div>
+
+            <!-- Balance and Quick Actions -->
+            <div class="cards">
+                <div class="card">
+                    <h3>Account Balance</h3>
+                    <p class="balance">$15,230.50</p>
+                </div>
+                <div class="card">
+                    <h3>Recent Transactions</h3>
+                    <ul>
+                        <li>Deposit - $500</li>
+                        <li>Transfer to John - $200</li>
+                        <li>ATM Withdrawal - $50</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button>Transfer</button>
+                        <button>Pay Bills</button>
+                        <button>Deposit</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Table -->
+            <h3>Transaction History</h3>
+            <table class="transaction-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024-11-11</td>
+                        <td>Transfer to John</td>
+                        <td>-$200.00</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>2024-11-10</td>
+                        <td>Deposit</td>
+                        <td>+$500.00</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td>2024-11-09</td>
+                        <td>ATM Withdrawal</td>
+                        <td>-$50.00</td>
+                        <td>Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

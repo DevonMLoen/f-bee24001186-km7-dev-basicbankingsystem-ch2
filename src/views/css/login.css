@@ -1,0 +1,112 @@
+/* login.css */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#loginContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.login-form h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.login-form p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.login-form label {
+    font-size: 14px;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="email"] { /* Include email input styling */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus,
+.login-form input[type="email"]:focus { /* Include email input focus styling */
+    outline: none;
+    border-color: #8f94fb;
+    box-shadow: 0 0 5px rgba(143, 148, 251, 0.5);
+}
+
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    background: #4e54c8;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-form button:hover {
+    background: #373bb3;
+}
+
+.additional-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.additional-links a {
+    font-size: 14px;
+    color: #4e54c8;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.additional-links a:hover {
+    color: #373bb3;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

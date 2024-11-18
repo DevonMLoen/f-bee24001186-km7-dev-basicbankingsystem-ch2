@@ -27,21 +27,26 @@ class AuthController {
 
 
   async resetPassword(req, res, next) {
-    const userId = req.user.id;
-    const { newPassword } = req.body;
     try {
+      const userId = req.user.id;
+      const { newPassword , confirmPassword } = req.body;
+
+      if (newPassword !== confirmPassword) {
+        return res.status(400).send("Passwords do not match");
+      }
+
       const result = await this.auth.resetPassword(userId, newPassword);
       res.json(result);
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
   async forgotPassword(req, res, next) {
     try {
-      const email = req.user.email;
+      const email = req.body.email;
       const result = await this.auth.forgotPassword(email);
-      res.json(result);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }

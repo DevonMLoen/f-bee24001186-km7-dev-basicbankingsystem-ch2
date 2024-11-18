@@ -23,6 +23,7 @@ const bankAccountRoutes = require("./routes/bank_accounts.js");
 const transactionRoutes = require("./routes/transactions.js");
 const authRoutes = require("./routes/auth.js");
 const mediaRoutes = require("./routes/media.js");
+const restrictforgot = require("./middleware/restrictforgot");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -38,12 +39,48 @@ app.use(express.static(path.join(__dirname, 'views')));
 
 app.use("/images",express.static("public/images"));
 
-app.get('/', async (req, res , next) => {
+app.get('/', async (req, res) => {
     try {
-        const users = await prisma.user.findMany();
-        res.render('index', { users });
+        res.render('index');
     } catch (error) {
-        next(error);
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/login', async (req, res) => {
+    try {
+        res.render('login');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/signup', async (req, res) => {
+    try {
+        res.render('signup');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/forgot-password', async (req, res) => {
+    try {
+        res.render('forgot-password');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/reset-password', restrictforgot ,async (req, res) => {
+    try {
+        res.render('reset-password');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 });
 

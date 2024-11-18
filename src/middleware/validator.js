@@ -179,6 +179,14 @@ const resetPasswordSchema = joi.object({
       'string.min': 'New password must have at least 10 characters.',
       'any.required': 'New password is required.'
     }),
+    confirmPassword: joi.string()
+    .min(10)
+    .required()
+    .messages({
+      'string.base': 'New password must be a string.',
+      'string.min': 'New password must have at least 10 characters.',
+      'any.required': 'New password is required.'
+    }),
 });
 
 const loginSchema = joi.object({
@@ -199,12 +207,27 @@ const loginSchema = joi.object({
     }),
 });
 
+const emailSchema = joi.object({
+  email: joi.string().email().required().messages({
+      'string.empty': 'Email is required',
+      'string.email': 'Please provide a valid email address'
+  })
+});
+
 
 
 const validateBankAccount = (req, res, next) => {
   const { error } = bankAccountSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
+  }
+  next();
+};
+
+const validateEmail = (req, res, next) => {
+  const { error } = emailSchema.validate(req.body);
+  if (error) {
+      return res.status(400).json({ message: error.details[0].message });
   }
   next();
 };
@@ -244,4 +267,4 @@ const validateLogin = (req, res, next) => {
 };
 
 
-module.exports = { validateUser, validateBankAccount, validateTransaction, validateBankPatchAccount, validateLogin, validateResetPassword };
+module.exports = { validateUser, validateBankAccount, validateTransaction, validateBankPatchAccount, validateLogin, validateResetPassword , validateEmail };
