@@ -12,7 +12,12 @@ const swaggerDocs = require("../swagger.json");
 
 const app = express();
 
+const { Server } = require('socket.io');
+const http = require('http');
+const server = http.createServer(app);
+const io = new Server(server);
 
+module.exports = io;
 
 const PORT = process.env.PORT;
 
@@ -29,6 +34,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(morgan('combined'));
 
+io.on('connection', (socket) => {
+    console.log('A user connected:', socket.id);
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected:', socket.id);
+    });
+});
+
 //SWAGGER
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -43,7 +56,6 @@ app.get('/', async (req, res) => {
     try {
         res.render('index');
     } catch (error) {
-        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -52,7 +64,6 @@ app.get('/login', async (req, res) => {
     try {
         res.render('login');
     } catch (error) {
-        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -61,7 +72,6 @@ app.get('/signup', async (req, res) => {
     try {
         res.render('signup');
     } catch (error) {
-        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -70,7 +80,6 @@ app.get('/forgot-password', async (req, res) => {
     try {
         res.render('forgot-password');
     } catch (error) {
-        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -79,7 +88,14 @@ app.get('/reset-password', restrictforgot ,async (req, res) => {
     try {
         res.render('reset-password');
     } catch (error) {
-        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/notification',async (req, res) => {
+    try {
+        res.render('notification');
+    } catch (error) {
         res.status(500).send('Internal Server Error');
     }
 });
@@ -110,6 +126,6 @@ app.use(function onError(err, req, res , next) {
     });
   });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
 });

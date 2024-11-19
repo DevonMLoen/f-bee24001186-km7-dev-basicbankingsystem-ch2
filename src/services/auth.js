@@ -52,7 +52,7 @@ class Auth {
         where: { userId: parseInt(userId) },
         data: { userPassword: hashedPassword },
       });
-      return { message: 'Password successfully reset' };
+      return { userName: user.userName };
     } catch (error) {
       throw new HttpError('Reset password failed: : ' + error.message, error.statusCode);
     }
@@ -71,23 +71,23 @@ class Auth {
 
       const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
 
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.mailtrap.io',     
-        port: 2525,                     
-        auth: {
-          user: process.env.MAILTRAP_USER, 
-          pass: process.env.MAILTRAP_PASS  
-        }
-      });
-
       // const transporter = nodemailer.createTransport({
-      //   service: "gmail",
-      //   secure:true,                    
+      //   host: 'smtp.mailtrap.io',     
+      //   port: 2525,                     
       //   auth: {
-      //     user: process.env.EMAIL_USER, 
-      //     pass: process.env.EMAIL_PASS  
+      //     user: process.env.MAILTRAP_USER, 
+      //     pass: process.env.MAILTRAP_PASS  
       //   }
       // });
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        secure:true,                    
+        auth: {
+          user: process.env.EMAIL_USER, 
+          pass: process.env.EMAIL_PASS  
+        }
+      });
 
       const mailOptions = {
         from: 'webdesign@gmail.com',
