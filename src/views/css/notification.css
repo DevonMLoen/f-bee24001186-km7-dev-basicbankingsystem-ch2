@@ -1,0 +1,52 @@
+/* Reset margin dan padding */
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Gaya dasar untuk body */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+}
+
+/* Judul halaman */
+h1 {
+    font-size: 24px;
+    color: #444;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Daftar notifikasi */
+ul#notifList {
+    list-style: none;
+    padding: 0;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Item notifikasi */
+ul#notifList li {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 15px;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Transisi untuk elemen */
+ul#notifList li {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover efek untuk item */
+ul#notifList li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}

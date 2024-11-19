@@ -1,5 +1,6 @@
 const Auth = require('../services/auth.js');
 const User = require('../services/users.js');
+const io = require('../index.js'); 
 
 class AuthController {
   constructor() {
@@ -10,7 +11,7 @@ class AuthController {
     try {
       const { email, password } = req.body;
       const result = await this.auth.login(email, password);
-      res.json(result);
+      res.status(200).json(result);
     } catch (error) {
       next(error)
     }
@@ -19,7 +20,7 @@ class AuthController {
   async logout(req, res, next) {
     try {
       const result = await this.auth.logout();
-      res.json(result);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
@@ -36,7 +37,8 @@ class AuthController {
       }
 
       const result = await this.auth.resetPassword(userId, newPassword);
-      res.json(result);
+      io.emit('newNotification', `User ${result.userName} has Reset Password Successfully!`);
+      res.status(200).json(result);
     } catch (error) {
       next(error)
     }
@@ -80,6 +82,7 @@ class AuthController {
       const user = new User(userData);
 
       const { newUser, newProfile } = await user.createUserWithProfile(profileData);
+      io.emit('newNotification', `User ${newUser.userName} has registered!`);
       res.status(201).json({ newUser, newProfile });
     } catch (error) {
       next(error);
