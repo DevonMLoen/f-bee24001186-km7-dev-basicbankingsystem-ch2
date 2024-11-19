@@ -1,6 +1,5 @@
 const io = { emit: jest.fn() }; // Mock io di sini
 
-// Mock index.js setelah io didefinisikan
 jest.mock('../index.js', () => {
   const io = { emit: jest.fn() }; // Mock io di sini
   return { io };  // Pastikan untuk mengembalikan io dalam objek
