@@ -109,6 +109,7 @@ app.use("/api/v1/media", mediaRoutes);
 
 app.use("*", function onError(err, req, res, next) {
   const statusCode = err.statusCode || 500;
+  console.log(err);
   res.statusCode = statusCode;
   if (statusCode >= 500 && statusCode < 600) {
     Sentry.withScope((scope) => {
