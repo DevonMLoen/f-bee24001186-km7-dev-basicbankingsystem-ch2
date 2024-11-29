@@ -1,6 +1,7 @@
 version: '3'
 services:
   database:
+    container_name: hedgedoc
     image: postgres:13.4-alpine
     environment:
       - POSTGRES_USER=hedgedoc

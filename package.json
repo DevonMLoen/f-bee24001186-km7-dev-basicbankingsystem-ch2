@@ -4,9 +4,10 @@
   "description": "OOP",
   "main": "bank_account.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "test": "jest ",
+    "start": "NODE_ENV=prod node src/index.js",
+    "dev": "NODE_ENV=dev nodemon src/index.js",
+    "test": "NODE_ENV=test  jest --detectOpenHandles",
+    "test:integration": "NODE_ENV=test  jest tests/integration --detectOpenHandles",
     "generate-openapi": "dotenv -e .env.local -- node ./openapi.js",
     "lint": "eslint . --fix"
   },

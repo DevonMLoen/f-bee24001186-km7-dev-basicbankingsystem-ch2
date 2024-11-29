@@ -82,7 +82,6 @@ class AuthController {
       };
 
       const user = new User(userData);
-
       const { newUser, newProfile } = await user.createUserWithProfile(
         profileData
       );

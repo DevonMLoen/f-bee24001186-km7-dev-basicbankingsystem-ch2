@@ -1,7 +1,7 @@
-require('dotenv').config({ path: '.env.local' });
-const Joi = require('joi');
-const { transpile } = require('postman2openapi');
-const { writeFile } = require('fs/promises');
+require("dotenv").config({ path: ".env.local" });
+const Joi = require("joi");
+const { transpile } = require("postman2openapi");
+const { writeFile } = require("fs/promises");
 
 async function main() {
   /**
@@ -13,7 +13,7 @@ async function main() {
   /** @type {Joi.ObjectSchema<PostmanEnv>} */
   const postmanEnvSchema = Joi.object({
     POSTMAN_API_KEY: Joi.string().required(),
-    POSTMAN_COLLECTION_ID: Joi.string().required()
+    POSTMAN_COLLECTION_ID: Joi.string().required(),
   })
     .options({ stripUnknown: true })
     .required();
@@ -28,8 +28,8 @@ async function main() {
     `https://api.getpostman.com/collections/${postmanEnv.POSTMAN_COLLECTION_ID}`,
     {
       headers: {
-        'x-api-key': postmanEnv.POSTMAN_API_KEY
-      }
+        "x-api-key": postmanEnv.POSTMAN_API_KEY,
+      },
     }
   );
 
@@ -37,7 +37,7 @@ async function main() {
    * @typedef {{
    *   collection: {
    *     info: Record<string, unknown>;
-   *     item: Record<string, unknown>[]; 
+   *     item: Record<string, unknown>[];
    *   };
    * }} PostmanCollection
    */
@@ -49,17 +49,17 @@ async function main() {
 
   openapi.servers = [
     {
-      url: 'http://localhost:2000',
-      description: 'Local development server'
-    }
+      url: "http://localhost:2000",
+      description: "Local development server",
+    },
   ];
 
   const stringifiedOpenapi = JSON.stringify(openapi, null, 2);
 
-  await writeFile('./swagger.json', stringifiedOpenapi);
+  await writeFile("./swagger.json", stringifiedOpenapi);
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
