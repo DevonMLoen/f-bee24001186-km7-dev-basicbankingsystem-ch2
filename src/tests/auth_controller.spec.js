@@ -1,8 +1,9 @@
+const createApp = require("../utils/create-app.js");
+const app = createApp();
 const AuthController = require("../controllers/auth");
 const { HttpError } = require("../middleware/errorhandling.js");
 const Auth = require("../services/auth.js");
 const User = require("../services/users.js");
-
 jest.mock("../services/auth.js");
 jest.mock("../services/users.js");
 describe("AuthContoller", () => {

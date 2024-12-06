@@ -255,7 +255,6 @@ describe("AuthContoller Integration test", () => {
         userId: "userid",
         userEmail: "test@example.com",
       });
-      console.log(token);
       const response = await request(app)
         .get("/api/v1/auths/whoami")
         .set("Authorization", `Bearer ${token}`);
