@@ -11,7 +11,6 @@ class Auth {
       const user = await prisma.user.findUnique({
         where: { userEmail: email },
       });
-
       if (!user) {
         throw new HttpError("Invalid email or password", 401);
       }
@@ -21,14 +20,14 @@ class Auth {
         throw new HttpError("Invalid email or password", 401);
       }
 
-      const token = this.generateToken(user);
+      const token = await this.generateToken(user);
       return { token, userId: user.userId };
     } catch (error) {
       throw new HttpError(`Login failed: ${error.message}`, error.statusCode);
     }
   }
 
-  async logout() {
+  logout() {
     // try {
     // implementasi code logout
     return { message: "Logout successful" };
@@ -70,7 +69,7 @@ class Auth {
       if (!user) {
         throw new HttpError("Email not found", 404);
       }
-      const token = this.generateTokenForgot(user);
+      const token = await this.generateTokenForgot(user);
 
       const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password?token=${token}`;
 
