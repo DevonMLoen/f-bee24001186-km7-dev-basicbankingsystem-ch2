@@ -85,15 +85,17 @@ class Auth {
 
       const transporter = nodemailer.createTransport({
         service: "gmail",
+        host: "smtp.gmail.com",
+        port: 465,
         secure: true,
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: "christiantiovantowork@gmail.com",
+          pass: "jync frgy cuxx drzf ",
         },
       });
 
       const mailOptions = {
-        from: "webdesign@gmail.com",
+        from: "christiantiovantowork@gmail.com",
         to: email,
         subject: "Password Reset Request",
         text: `Click the link to reset your password: ${resetPasswordUrl}`,
@@ -103,9 +105,9 @@ class Auth {
         if (error) {
           console.log(error);
         } else {
-          console.log(`Email sent: ` + info.response);
         }
       });
+      console.log("mancing mania mantappp");
     } catch (error) {
       throw new HttpError(
         "Forgot password failed: " + error.message,
