@@ -1,5 +1,5 @@
 const createApp = require("../utils/create-app.js");
-const app = createApp();
+createApp();
 const AuthController = require("../controllers/auth");
 const { HttpError } = require("../middleware/errorhandling.js");
 const Auth = require("../services/auth.js");
