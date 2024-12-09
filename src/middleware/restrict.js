@@ -14,7 +14,6 @@ module.exports = async (req, res, next) => {
     if (err) {
       return next(new UnauthorizedError());
     }
-
     req.user = decoded;
     next();
   });

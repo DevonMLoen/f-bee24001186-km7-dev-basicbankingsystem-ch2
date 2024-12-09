@@ -15,12 +15,11 @@ class BankAccountController {
       const { userId, bankName, bankAccountNumber, balance } = req.body;
 
       const accountData = {
-        id: userId,
-        name: bankName,
-        number: bankAccountNumber,
+        userId: userId,
+        bankName: bankName,
+        bankAccountNumber: bankAccountNumber,
         balance: balance,
       };
-
       const account = new BankAccount(accountData);
 
       const newBankAccount = await account.createAccount();

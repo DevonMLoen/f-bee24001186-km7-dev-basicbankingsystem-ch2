@@ -91,6 +91,7 @@ function createApp() {
   app.use("/api/v1/media", mediaRoutes);
 
   app.use("*", function onError(err, req, res, next) {
+    console.log(err);
     const statusCode = err.statusCode || 500;
     res.statusCode = statusCode;
     if (statusCode >= 500 && statusCode < 600) {

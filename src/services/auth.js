@@ -106,7 +106,6 @@ class Auth {
         } else {
         }
       });
-      console.log("mancing mania mantappp");
     } catch (error) {
       throw new HttpError(
         "Forgot password failed: " + error.message,
