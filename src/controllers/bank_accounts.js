@@ -1,10 +1,9 @@
-const BankAccount = require('../services/bank_accounts');
+const BankAccount = require("../services/bank_accounts");
 
 class BankAccountController {
   async getAllBankAccounts(req, res, next) {
     try {
       const bankaccounts = await BankAccount.getAllBankAccounts();
-
       res.status(200).json(bankaccounts);
     } catch (error) {
       next(error);
@@ -16,14 +15,12 @@ class BankAccountController {
       const { userId, bankName, bankAccountNumber, balance } = req.body;
 
       const accountData = {
-        id: userId,
-        name: bankName,
-        number: bankAccountNumber,
+        userId: userId,
+        bankName: bankName,
+        bankAccountNumber: bankAccountNumber,
         balance: balance,
       };
-
       const account = new BankAccount(accountData);
-
       const newBankAccount = await account.createAccount();
 
       res.status(201).json(newBankAccount);
@@ -35,9 +32,7 @@ class BankAccountController {
   async getBankAccountById(req, res, next) {
     try {
       const bankAccountId = req.params.id;
-
       const bankAccount = await BankAccount.getBankAccountById(bankAccountId);
-
       res.status(200).json({ bankAccount });
     } catch (error) {
       next(error);
@@ -66,7 +61,7 @@ class BankAccountController {
         balance,
       });
       return res.status(200).json({
-        message: 'Bank account successfully updated',
+        message: "Bank account successfully updated",
         account: updatedAccount,
       });
     } catch (error) {
@@ -81,7 +76,7 @@ class BankAccountController {
     try {
       const updatedAccount = await BankAccount.withdraw(id, amount);
       return res.status(200).json({
-        message: 'Bank account Withdraw successfully',
+        message: "Bank account Withdraw successfully",
         account: updatedAccount,
       });
     } catch (error) {
@@ -96,11 +91,11 @@ class BankAccountController {
     try {
       const updatedAccount = await BankAccount.deposit(id, amount);
       return res.status(200).json({
-        message: 'Bank account Deposit successfully',
+        message: "Bank account Deposit successfully",
         account: updatedAccount,
       });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
