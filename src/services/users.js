@@ -11,6 +11,26 @@ class User {
     this.password = data.password;
   }
 
+  async createUser() {
+    const existingEmail = await User.prisma.user.findUnique({
+      where: { userEmail: this.email },
+    });
+
+    if (existingEmail) {
+      throw new HttpError("Email has already been used", 409);
+    }
+
+    const hashedPassword = await bcrypt.hash(this.password, 10);
+    const newUser = await prisma.user.create({
+      data: {
+        userName: this.name,
+        userEmail: this.email,
+        userPassword: hashedPassword,
+      },
+    });
+    return newUser;
+  }
+
   async createUserWithProfile(profileData) {
     try {
       const existingEmail = await User.prisma.user.findUnique({

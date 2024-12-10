@@ -21,7 +21,6 @@ class BankAccountController {
         balance: balance,
       };
       const account = new BankAccount(accountData);
-
       const newBankAccount = await account.createAccount();
 
       res.status(201).json(newBankAccount);
