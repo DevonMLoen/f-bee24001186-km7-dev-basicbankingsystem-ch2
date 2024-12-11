@@ -4,8 +4,8 @@ const { HttpError } = require("../middleware/errorhandling");
 class Profile {
   static prisma = prisma;
   constructor(data) {
-    this.type = data.type;
-    this.number = data.number;
+    this.type = data.profileType;
+    this.number = data.profileNumber;
     this.address = data.address;
   }
 
@@ -21,7 +21,10 @@ class Profile {
       });
       return newProfile;
     } catch (error) {
-      throw new HttpError('Failed to create profile : ' + error.message,error.statusCode);
+      throw new HttpError(
+        "Failed to create profile : " + error.message,
+        error.statusCode
+      );
     }
   }
 
@@ -34,7 +37,10 @@ class Profile {
       });
       return profile;
     } catch (error) {
-      throw new HttpError('Failed to get profile : ' + error.message,error.statusCode);
+      throw new HttpError(
+        "Failed to get profile : " + error.message,
+        error.statusCode
+      );
     }
   }
 }

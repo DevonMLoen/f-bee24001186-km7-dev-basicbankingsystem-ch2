@@ -14,7 +14,7 @@ jest.mock("nodemailer", () => ({
 let userService = require("./../../services/users");
 const Auth = require("../../services/auth");
 userService = new userService({ name: "", email: "", password: "" });
-describe("AuthContoller Integration test", () => {
+describe("AuthControllerIntegration test", () => {
   let app;
   let testUser = {};
   let authToken;

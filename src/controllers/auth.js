@@ -76,8 +76,8 @@ class AuthController {
       };
 
       const profileData = {
-        type: value.profileType,
-        number: value.profileNumber,
+        profileType: value.profileType,
+        profileNumber: value.profileNumber,
         address: value.address,
       };
 

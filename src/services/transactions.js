@@ -11,33 +11,44 @@ class Transaction {
 
   async createTransaction() {
     try {
-      const transactionResult = await Transaction.prisma.$transaction(async (tx) => {
+      const transactionResult = await Transaction.prisma.$transaction(
+        async (tx) => {
+          const sourceAccount = await this.getAccount(tx, this.sourceAccountId);
 
-        const sourceAccount = await this.getAccount(tx, this.sourceAccountId);
+          this.checkSufficientBalance(sourceAccount);
 
-        this.checkSufficientBalance(sourceAccount);
+          const destinationAccount = await this.getAccount(
+            tx,
+            this.destinationAccountId
+          );
+          await this.updateAccountBalance(
+            tx,
+            this.sourceAccountId,
+            sourceAccount.balance - this.amount
+          );
 
-        const destinationAccount = await this.getAccount(tx, this.destinationAccountId);
+          await this.updateAccountBalance(
+            tx,
+            this.destinationAccountId,
+            destinationAccount.balance + this.amount
+          );
+          const newTransaction = await tx.transaction.create({
+            data: {
+              sourceAccountId: this.sourceAccountId,
+              destinationAccountId: this.destinationAccountId,
+              amount: this.amount,
+            },
+          });
 
-        await this.updateAccountBalance(tx, this.sourceAccountId, sourceAccount.balance - this.amount);
-
-        await this.updateAccountBalance(tx, this.destinationAccountId, destinationAccount.balance + this.amount);
-
-        const newTransaction = await tx.transaction.create({
-          data: {
-            sourceAccountId: this.sourceAccountId,
-            destinationAccountId: this.destinationAccountId,
-            amount: this.amount,
-          },
-        });
-
-        return newTransaction;
-      });
-
+          return newTransaction;
+        }
+      );
       return transactionResult;
-
     } catch (error) {
-      throw new HttpError('Failed to Create transactions : ' + error.message, error.statusCode);
+      throw new HttpError(
+        "Failed to Create transactions : " + error.message,
+        error.statusCode
+      );
     }
   }
 
@@ -45,7 +56,7 @@ class Transaction {
     const account = await tx.bankAccount.findUnique({
       where: { bankAccountId: parseInt(accountId) },
     });
-    
+
     if (!account) {
       throw new HttpError(`Account with ID ${accountId} not found`, 404);
     }
@@ -55,7 +66,7 @@ class Transaction {
 
   checkSufficientBalance(account) {
     if (account.balance < this.amount) {
-      throw new HttpError('Insufficient balance in source account', 403);
+      throw new HttpError("Insufficient balance in source account", 403);
     }
   }
 
@@ -80,7 +91,10 @@ class Transaction {
       }
       return transactions;
     } catch (error) {
-      throw new HttpError('Failed to retrieve transactions : ' + error.message, error.statusCode);
+      throw new HttpError(
+        "Failed to retrieve transactions : " + error.message,
+        error.statusCode
+      );
     }
   }
 
@@ -102,7 +116,10 @@ class Transaction {
 
       return transaction;
     } catch (error) {
-      throw new HttpError('Failed to get Transaction : ' + error.message, error.statusCode);
+      throw new HttpError(
+        "Failed to get Transaction : " + error.message,
+        error.statusCode
+      );
     }
   }
 }
