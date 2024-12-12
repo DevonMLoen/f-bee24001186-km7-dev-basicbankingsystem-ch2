@@ -3,7 +3,6 @@ createApp();
 const BankController = require("../controllers/bank_accounts");
 const Bank = require("./../services/bank_accounts");
 const { HttpError } = require("../middleware/errorhandling");
-const { bankAccount } = require("../db");
 jest.mock("../services/bank_accounts");
 jest.mock("../db", () => ({
   bankAccount: {

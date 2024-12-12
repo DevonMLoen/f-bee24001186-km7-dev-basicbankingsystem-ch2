@@ -23,19 +23,19 @@ class Transaction {
           );
           await this.updateAccountBalance(
             tx,
-            this.sourceAccountId,
+            parseInt(this.sourceAccountId),
             sourceAccount.balance - this.amount
           );
 
           await this.updateAccountBalance(
             tx,
-            this.destinationAccountId,
+            parseInt(this.destinationAccountId),
             destinationAccount.balance + this.amount
           );
           const newTransaction = await tx.transaction.create({
             data: {
-              sourceAccountId: this.sourceAccountId,
-              destinationAccountId: this.destinationAccountId,
+              sourceAccountId: parseInt(this.sourceAccountId),
+              destinationAccountId: parseInt(this.destinationAccountId),
               amount: this.amount,
             },
           });

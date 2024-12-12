@@ -128,13 +128,17 @@ describe("transactionService", () => {
       });
       expect(mockPrismaTransaction.bankAccount.update.mock.calls[0][0]).toEqual(
         {
-          where: { bankAccountId: transactionService.sourceAccountId },
+          where: {
+            bankAccountId: parseInt(transactionService.sourceAccountId),
+          },
           data: { balance: sourceAccount.balance - transactionService.amount },
         }
       );
       expect(mockPrismaTransaction.bankAccount.update.mock.calls[1][0]).toEqual(
         {
-          where: { bankAccountId: transactionService.destinationAccountId },
+          where: {
+            bankAccountId: parseInt(transactionService.destinationAccountId),
+          },
           data: {
             balance: destinationAccount.balance + transactionService.amount,
           },
@@ -142,8 +146,8 @@ describe("transactionService", () => {
       );
       expect(mockPrismaTransaction.transaction.create).toHaveBeenCalledWith({
         data: {
-          sourceAccountId: `${sourceAccount.bankAccountId}`,
-          destinationAccountId: `${destinationAccount.bankAccountId}`,
+          sourceAccountId: parseInt(sourceAccount.bankAccountId),
+          destinationAccountId: parseInt(destinationAccount.bankAccountId),
           amount: transactionService.amount,
         },
       });

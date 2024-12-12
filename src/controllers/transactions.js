@@ -1,4 +1,4 @@
-const Transaction = require('../services/transactions');
+const Transaction = require("../services/transactions");
 
 class TransactionController {
   async getAllTransactions(req, res, next) {
@@ -15,17 +15,20 @@ class TransactionController {
     const { sourceAccountId, destinationAccountId, amount } = req.body;
 
     try {
-      const transaction = new Transaction({ sourceAccountId, destinationAccountId, amount });
+      const transaction = new Transaction({
+        sourceAccountId,
+        destinationAccountId,
+        amount,
+      });
 
       const transactionResult = await transaction.createTransaction();
 
       return res.status(201).json({
-        message: 'Transaction successful',
+        message: "Transaction successful",
         transaction: transactionResult,
       });
-
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -34,10 +37,9 @@ class TransactionController {
       const transactionId = req.params.id;
 
       const transaction = await Transaction.getTransactionById(transactionId);
-
       res.status(200).json({ transaction });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 }
