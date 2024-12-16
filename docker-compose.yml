@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:12.6
+    container_name: database_devon
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - ${DB_PORT}:5432
+    tty: true
+    restart: always
+    volumes:
+      - devon:/var/lib/postgresql/data
+volumes:
+  devon:
